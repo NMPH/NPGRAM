@@ -25,7 +25,6 @@ class SocketAndStreams {
     Socket socket;
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
-
     SocketAndStreams(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;
         this.socket = socket;
@@ -101,7 +100,6 @@ class Waiter implements Runnable {
     static int count;
     ServerSocket server;
     ArrayList<SocketAndStreams> sockets;
-
     Waiter(ServerSocket server) {
         sockets = new ArrayList<SocketAndStreams>();
         this.server = server;
