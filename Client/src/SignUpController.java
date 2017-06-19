@@ -1,12 +1,14 @@
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.fxml.*;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+import javafx.scene.Parent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -27,7 +29,7 @@ public class SignUpController {
     @FXML
     private Button SignUpButton;
 
-    public void SignUpCheck(ActionEvent event) {
+    public void SignUpCheck(ActionEvent event) throws IOException {
         if (!(Validations.isValidUserName(UserNameText.getText())
                 && Validations.isValidFullName(FullNameText.getText())
                 && Validations.isValidPassword(PasswordText.getText()))) {
@@ -44,9 +46,18 @@ public class SignUpController {
                 outputToServer.flush();
                 boolean isSignUpSuccessfull = inputFromServer.readBoolean();
                 if (isSignUpSuccessfull) {
+                    Stage primaryStage=new Stage();
+                    FXMLLoader loader=new FXMLLoader();
+                    Pane root=loader.load(getClass().getResource("Login.fxml").openStream());
+                    LoginController loginController=(LoginController)loader.getController();
+                    loginController.Redirect(UserNameText.getText()+" Signed Up");
+                    Scene scene=new Scene(root);
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
                     badLoginInputsLabel.setText("SignUp Successfull!");
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.close();
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
