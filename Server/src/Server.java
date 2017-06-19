@@ -9,12 +9,27 @@ import java.util.Scanner;
 /**
  * Created by noyz on 6/18/17.
  */
-class User implements Serializable {
+
+/**
+ * User class has all information about user's data
+ * this class will get completed during the developement
+ * every time the User class changes the serialized file should be deleted and made again because the class has changed
+ */
+class User{
+    UserFirstInfo userFirstInfo;
+    User(UserFirstInfo userFirstInfo){
+        this.userFirstInfo=userFirstInfo;
+    }
+}
+/*
+the information which is entered on sign up
+ */
+class UserFirstInfo implements Serializable {
     String fullName;
     String username;
     String password;
 
-    User(String fullName, String username, String password) {
+    UserFirstInfo(String fullName, String username, String password) {
         this.fullName = fullName;
         this.username = username;
         this.password = password;
@@ -54,9 +69,9 @@ class SocketHandler implements Runnable {
                         usersFile.createNewFile();
                     }
                     ObjectInputStream userInput = new ObjectInputStream(new FileInputStream(usersFile));
-                    ArrayList<User> users = (ArrayList<User>) (userInput.readObject());
+                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userInput.readObject());
                     HashSet<String> usernames = new HashSet<>();
-                    Iterator<User> userIterator = users.iterator();
+                    Iterator<UserFirstInfo> userIterator = users.iterator();
                     while (userIterator.hasNext()) {
                         usernames.add(userIterator.next().username);
                     }
@@ -69,18 +84,31 @@ class SocketHandler implements Runnable {
                     String fullName = ((String) inputFromSocket.readObject());
                     String username = ((String) inputFromSocket.readObject());
                     String password = ((String) inputFromSocket.readObject());
-                    User newUser = new User(fullName, username, password);
+                    UserFirstInfo newUserFirstInfo = new UserFirstInfo(fullName, username, password);
+                    User newUser = new User(newUserFirstInfo);
+                    File newUserFolder = new File("data/Users/"+ newUser.userFirstInfo.username);
+                    newUserFolder.mkdir();
+                    File newUserFile = new File("data/Users/"+ newUser.userFirstInfo.username +"/" + "users.ser");
+                    newUserFile.createNewFile();
+                    try {
+                        ObjectOutputStream usersOutputStream = new ObjectOutputStream(new FileOutputStream(newUserFile));
+                        usersOutputStream.writeObject(newUser);
+                        usersOutputStream.close();
+                    }catch (IOException e){
+                        System.out.println("Problem while serializing the user data");
+                        e.printStackTrace();
+                    }
                     File usersFile = new File("data/users.ser");
                     if (!usersFile.exists()) {
                         usersFile.createNewFile();
                     }
-                    ObjectInputStream userInput = new ObjectInputStream(new FileInputStream(usersFile));
-                    ArrayList<User> users = (ArrayList<User>) (userInput.readObject());
-                    users.add(newUser);
-                    ObjectOutputStream userOutput = new ObjectOutputStream(new FileOutputStream(usersFile));
-                    userOutput.writeObject(users);
-                    userOutput.close();
-                    userInput.close();
+                    ObjectInputStream userFileInput = new ObjectInputStream(new FileInputStream(usersFile));
+                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+                    users.add(newUserFirstInfo);
+                    ObjectOutputStream userFileOutput = new ObjectOutputStream(new FileOutputStream(usersFile));
+                    userFileOutput.writeObject(users);
+                    userFileOutput.close();
+                    userFileInput.close();
                     outputToSocket.writeBoolean(true);
                     outputToSocket.flush();
                     break;
@@ -131,9 +159,9 @@ class Waiter implements Runnable {
 
 public class Server {
     public static void inits() {
-        File data = new File("data");
-        if (!data.exists()) {
-            data.mkdir();
+        File usersDir = new File("data/Users");
+        if(!usersDir.exists()){
+            usersDir.mkdirs();
         }
         File users_file = new File("data/users.ser");
         try {

@@ -23,6 +23,7 @@ public class LoginController {
     private Button LoginButton;
     @FXML
     private Label label;
+
     public void SignUp(ActionEvent event){
         Stage stage = new Stage();
         try {
