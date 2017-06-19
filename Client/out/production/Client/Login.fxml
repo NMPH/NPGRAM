@@ -51,7 +51,6 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </TextField>
-            <Label />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
                <font>
                   <Font size="14.0" />
@@ -73,6 +72,17 @@
                         <Insets left="70.0" right="60.0" top="30.0" />
                      </HBox.margin>
                   </Button>
+                  <Region HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label fx:id="loginFailure">
+                     <HBox.margin>
+                        <Insets left="10.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
                   <Region HBox.hgrow="ALWAYS" />
                </children>
             </HBox>

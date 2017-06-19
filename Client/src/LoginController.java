@@ -26,6 +26,8 @@ public class LoginController {
     private Button LoginButton;
     @FXML
     private Label label;
+    @FXML
+    private Label loginFailure;
     public void Login(ActionEvent event) {
         try {
             Socket server = new Socket("127.0.0.1", 1234);
@@ -39,6 +41,7 @@ public class LoginController {
             if(isLogin){
                 System.out.println("LOGIN!!!");
             }else{
+                loginFailure.setText("invalid username or password");
                 System.out.println("WRONG INFO");
             }
         } catch (IOException e) {
