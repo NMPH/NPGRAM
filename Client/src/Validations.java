@@ -30,7 +30,7 @@ public class Validations {
             e.printStackTrace();
         }
         //also not duplicated should be checked
-        if (userName.length() < 6)
+        if (userName.length() < 4)
             return false;
         if (userName.contains(" "))
             return false;
@@ -38,7 +38,9 @@ public class Validations {
     }
 
     public static boolean isValidPassword(String password) {
-        if (!isValidUserName(password))
+        if (password.length() < 6)
+            return false;
+        if (password.contains(" "))
             return false;
         return true;
     }
