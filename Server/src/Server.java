@@ -15,7 +15,7 @@ import java.util.Scanner;
  * this class will get completed during the developement
  * every time the User class changes the serialized file should be deleted and made again because the class has changed
  */
-class User{
+class User implements Serializable{
     UserFirstInfo userFirstInfo;
     User(UserFirstInfo userFirstInfo){
         this.userFirstInfo=userFirstInfo;
@@ -63,6 +63,28 @@ class SocketHandler implements Runnable {
         try {
             String command = (String) inputFromSocket.readObject();
             switch (command) {
+                case "login":{
+                    String usernameEntered = ((String) inputFromSocket.readObject());
+                    String passwordEntered = ((String) inputFromSocket.readObject());
+                    File usersFile = new File("data/users.ser");
+                    ObjectInputStream userFileInput = new ObjectInputStream(new FileInputStream(usersFile));
+                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+                    Iterator<UserFirstInfo> userFirstInfoIterator = users.iterator();
+                    boolean isLoginCorrect = false;
+                    while(userFirstInfoIterator.hasNext()){
+                        UserFirstInfo userFirstInfo = userFirstInfoIterator.next();
+                        if(userFirstInfo.username.equals(usernameEntered)){
+                            if(userFirstInfo.password.equals(passwordEntered)){
+                                outputToSocket.writeBoolean(true);
+                                isLoginCorrect=true;
+                            }
+                        }
+                    }
+                    if(!isLoginCorrect)
+                        outputToSocket.writeBoolean(false);
+                    outputToSocket.flush();
+                    break;
+                }
                 case "get users": {
                     File usersFile = new File("data/users.ser");
                     if (!usersFile.exists()) {

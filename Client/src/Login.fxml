@@ -68,7 +68,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Button fx:id="LoginButton" mnemonicParsing="false" text="Login">
+                  <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#Login" text="Login">
                      <HBox.margin>
                         <Insets left="70.0" right="60.0" top="30.0" />
                      </HBox.margin>
