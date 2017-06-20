@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,11 +40,19 @@ public class LoginController {
             outputToServer.flush();
             boolean isLogin= inputFromServer.readBoolean();
             if(isLogin){
-                Stage profileStage = new Stage();
+               /* Stage profileStage = new Stage();
                 Parent root = FXMLLoader.load(getClass().getResource("Profile.fxml"));
                 Scene scene = new Scene(root,600,400);
                 profileStage.setScene(scene);
-                profileStage.show();
+                profileStage.show();*/
+                Stage primaryStage=new Stage();
+                FXMLLoader loader=new FXMLLoader();
+                Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
+                ProfileController profileController=(ProfileController) loader.getController();
+                Scene scene = new Scene(root,600,400);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+                profileController.setUsername(usernameText.getText());
                 System.out.println("LOGIN!!!");
             }else{
                 loginFailure.setText("invalid username or password");

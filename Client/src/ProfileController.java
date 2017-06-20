@@ -5,13 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sun.awt.shell.ShellFolder;
 
-import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,18 +22,31 @@ import java.io.IOException;
  * Created by noyz on 6/20/17.
  */
 public class ProfileController {
+    String username;
     @FXML
     ImageView profilePicture;
     @FXML
     Button editProfileButton;
+    public void setUsername(String username){
+        this.username=username;
+    }
     public void editProfilePageOpener(ActionEvent event){
         try {
-            Stage editProfileStage = new Stage();
+       /*     Stage editProfileStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("EditProfile.fxml"));
             Scene scene = new Scene(root, 600, 400);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             editProfileStage.setScene(scene);
-            editProfileStage.show();
+            editProfileStage.show();*/
+            Stage primaryStage=new Stage();
+            FXMLLoader loader=new FXMLLoader();
+            Pane root=loader.load(getClass().getResource("EditProfile.fxml").openStream());
+            EditProfileController editProfileController=(EditProfileController) loader.getController();
+            editProfileController.setUsernameLabel(username);
+            Scene scene=new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
         }catch (IOException e){
             System.out.println("edit profile opening problem");
             e.printStackTrace();
