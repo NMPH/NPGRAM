@@ -22,11 +22,12 @@ import java.io.IOException;
  * Created by noyz on 6/20/17.
  */
 public class ProfileController {
-    String username;
+    public String username;
     @FXML
     ImageView profilePicture;
     @FXML
     Button editProfileButton;
+
     public void setUsername(String username){
         this.username=username;
     }
