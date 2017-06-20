@@ -30,7 +30,6 @@ public class EditProfileController implements Initializable{
     public void exitEditProfileLabelclick(Event event){
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
-
     }
     public void DoneLabelClick(Event event){
         String name = nameLabel.getText();
@@ -84,7 +83,9 @@ public class EditProfileController implements Initializable{
             e.printStackTrace();
         }
     }
-
+   /* public void setFullnameLabel(String username){
+        bioLabel.setText(username);
+    }*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
