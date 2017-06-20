@@ -17,6 +17,8 @@ import java.net.Socket;
  * Created by noyz on 6/18/17.
  */
 public class LoginController {
+  //  User user;
+   // String  FullNameText;
     @FXML
     private TextField usernameText;
     @FXML
@@ -45,14 +47,18 @@ public class LoginController {
                 Scene scene = new Scene(root,600,400);
                 profileStage.setScene(scene);
                 profileStage.show();*/
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
                 Stage primaryStage=new Stage();
                 FXMLLoader loader=new FXMLLoader();
                 Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
                 ProfileController profileController=(ProfileController) loader.getController();
                 Scene scene = new Scene(root,600,400);
+                scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.show();
                 profileController.setUsername(usernameText.getText());
+              //  profileController.setFullname(FullNameText);
                 System.out.println("LOGIN!!!");
             }else{
                 loginFailure.setText("invalid username or password");

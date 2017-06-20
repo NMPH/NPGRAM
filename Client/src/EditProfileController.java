@@ -1,9 +1,11 @@
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,7 +30,6 @@ public class EditProfileController implements Initializable{
     public void exitEditProfileLabelclick(Event event){
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
-
     }
     public void DoneLabelClick(Event event){
         String name = nameLabel.getText();
@@ -38,7 +39,9 @@ public class EditProfileController implements Initializable{
     public void setUsernameLabel(String username){
         usernameLabel.setText(username);
     }
-
+   /* public void setFullnameLabel(String username){
+        bioLabel.setText(username);
+    }*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {

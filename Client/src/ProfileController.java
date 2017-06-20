@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,13 +24,20 @@ import java.io.IOException;
  */
 public class ProfileController {
     String username;
+   // String Fullname;
     @FXML
     ImageView profilePicture;
     @FXML
     Button editProfileButton;
+    @FXML
+    Label UsernameTitle;
     public void setUsername(String username){
         this.username=username;
+        UsernameTitle.setText(username);
     }
+   /* public void setFullname(String Fullname){
+        this.Fullname=Fullname;
+    }*/
     public void editProfilePageOpener(ActionEvent event){
         try {
        /*     Stage editProfileStage = new Stage();
@@ -38,15 +46,20 @@ public class ProfileController {
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             editProfileStage.setScene(scene);
             editProfileStage.show();*/
+//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//            stage.close();
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             Pane root=loader.load(getClass().getResource("EditProfile.fxml").openStream());
             EditProfileController editProfileController=(EditProfileController) loader.getController();
             editProfileController.setUsernameLabel(username);
+            //editProfileController.setFullnameLabel(Fullname);
+           // System.out.println(Fullname+"gh");
             Scene scene=new Scene(root);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
+
         }catch (IOException e){
             System.out.println("edit profile opening problem");
             e.printStackTrace();
