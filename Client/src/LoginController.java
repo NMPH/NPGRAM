@@ -26,8 +26,6 @@ public class LoginController {
     private Button LoginButton;
     @FXML
     private Label label;
-    @FXML
-    private Label loginFailure;
     public void Login(ActionEvent event) {
         try {
             Socket server = new Socket("127.0.0.1", 1234);
@@ -39,6 +37,11 @@ public class LoginController {
             outputToServer.flush();
             boolean isLogin= inputFromServer.readBoolean();
             if(isLogin){
+                Stage profileStage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("Profile.fxml"));
+                Scene scene = new Scene(root,600,400);
+                profileStage.setScene(scene);
+                profileStage.show();
                 System.out.println("LOGIN!!!");
             }else{
                 loginFailure.setText("invalid username or password");
@@ -54,8 +57,8 @@ public class LoginController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("SignUp.fxml"));
             Scene scene = new Scene(root,600,400);
-            stage.setScene(scene);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            stage.setScene(scene);
             stage.show();
         }catch (IOException e){
             System.out.println("Problem in Sign Up ShowUp");

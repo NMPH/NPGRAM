@@ -44,7 +44,6 @@ public class Validations {
             return false;
         return true;
     }
-
     public static boolean isValidFullName(String fullName) {
         fullName = fullName.trim();
         String[] splittedName = fullName.split(" ");

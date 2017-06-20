@@ -1,3 +1,5 @@
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,16 +11,39 @@ import java.util.Scanner;
 /**
  * Created by noyz on 6/18/17.
  */
-
 /**
  * User class has all information about user's data
  * this class will get completed during the developement
  * every time the User class changes the serialized file should be deleted and made again because the class has changed
  */
 class User implements Serializable{
+    ArrayList<String> friendsUsernames;
+    boolean isPrivate;
+    String bio;
+    BufferedImage profilePicture;
+    ArrayList<Post> posts;
     UserFirstInfo userFirstInfo;
     User(UserFirstInfo userFirstInfo){
         this.userFirstInfo=userFirstInfo;
+        isPrivate=false;
+        posts = new ArrayList<Post>();
+    }
+}
+class Post implements Serializable{
+    ArrayList<String> likes;
+    ArrayList<NPComment> comments;
+    String caption;
+    BufferedImage image;
+    Post(BufferedImage image){
+        this.image=image;
+    }
+}
+class NPComment{
+    String username;
+    String text;
+    NPComment(String text, String username){
+        this.text=text;
+        this.username=username;
     }
 }
 /*
