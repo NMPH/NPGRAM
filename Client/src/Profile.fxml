@@ -62,7 +62,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Button fx:id="editProfileButton" mnemonicParsing="false" onAction="#setProfilePicture" text="edit profile">
+                  <Button fx:id="editProfileButton" mnemonicParsing="false" onAction="#editProfilePageOpener" text="edit profile">
                      <VBox.margin>
                         <Insets left="110.0" />
                      </VBox.margin>

@@ -21,11 +21,13 @@ public class LoginController {
     @FXML
     private PasswordField passwordText;
     @FXML
-    private Hyperlink SignUp;
+    private Hyperlink signUp;
     @FXML
     private Button LoginButton;
     @FXML
     private Label label;
+    @FXML
+    private Label loginFailure;
     public void Login(ActionEvent event) {
         try {
             Socket server = new Socket("127.0.0.1", 1234);
