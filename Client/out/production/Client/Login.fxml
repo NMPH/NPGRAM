@@ -17,7 +17,7 @@
    <top>
       <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Instagram" BorderPane.alignment="CENTER">
          <font>
-            <Font size="30.0" />
+            <Font name="Arial Narrow" size="30.0" />
          </font>
          <BorderPane.margin>
             <Insets right="5.0" />

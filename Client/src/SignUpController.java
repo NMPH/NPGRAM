@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -52,6 +52,7 @@ public class SignUpController {
                     LoginController loginController=(LoginController)loader.getController();
                     loginController.Redirect(UserNameText.getText()+" Signed Up");
                     Scene scene=new Scene(root);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
                     primaryStage.setScene(scene);
                     primaryStage.show();
                     badLoginInputsLabel.setText("SignUp Successfull!");

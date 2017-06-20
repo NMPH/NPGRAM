@@ -55,6 +55,7 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("SignUp.fxml"));
             Scene scene = new Scene(root,600,400);
             stage.setScene(scene);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.show();
         }catch (IOException e){
             System.out.println("Problem in Sign Up ShowUp");
