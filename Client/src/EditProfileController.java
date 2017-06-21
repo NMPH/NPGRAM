@@ -3,6 +3,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -22,12 +23,29 @@ import java.util.ResourceBundle;
 public class EditProfileController implements Initializable{
     User user;
     @FXML
+    Label changingFailure;
+    @FXML
     Label exitEditProfileLabel;
     @FXML
     Label DoneLabel;
     @FXML
     TextField nameLabel,usernameLabel,bioLabel;
     public void exitEditProfileLabelclick(Event event){
+        try {
+            Stage profileStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            Pane root = loader.load(getClass().getResource("Profile.fxml").openStream());
+            ProfileController profileController=(ProfileController) loader.getController();
+            profileController.username=user.userFirstInfo.username;
+            profileController.bioLabel.setText(user.bio);
+            profileController.init();
+            Scene profileScene = new Scene(root, 650, 400);
+            profileStage.setScene(profileScene);
+            profileStage.show();
+        }catch (IOException e){
+            System.out.println("Error while pushing x label in editProfile");
+            e.printStackTrace();
+        }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -36,6 +54,18 @@ public class EditProfileController implements Initializable{
         String oldUsername = user.userFirstInfo.username;
         String username = usernameLabel.getText();
         String bio = bioLabel.getText();
+        Boolean isValid=false;
+        if(Validations.isValidFullName(name)){
+            if(!username.equals(oldUsername)){
+                if(Validations.isValidUserName(username)){
+                    isValid=true;
+                }
+            } else isValid=true;
+        }
+        if (!isValid) {
+            changingFailure.setText("Please review the changed information");
+            return;
+        }
         user.bio=bio;
         user.userFirstInfo.username=username;
         user.userFirstInfo.fullName=name;
@@ -48,15 +78,20 @@ public class EditProfileController implements Initializable{
             outputToServer.writeObject(oldUsername);
             outputToServer.writeObject(user);
             //changing profile username
+            Stage profileStage = new Stage();
             FXMLLoader loader=new FXMLLoader();
             Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
             ProfileController profileController=(ProfileController) loader.getController();
+            //here we should load the profile stage
             profileController.username=username;
+            profileController.init();
+            profileController.bioLabel.setText(user.bio);
+            profileController.UsernameTitle.setText(username);
+            Scene profileScene = new Scene(root,650,400);
+            profileStage.setScene(profileScene);
+            profileStage.show();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
-            /*
-            now we should change the user file and also the directory name AND ALSO the username in user file
-             */
         }catch (IOException e){
             System.out.println("Problem when trying to writing new new user when DONE label is clicked");
             e.printStackTrace();
@@ -74,6 +109,7 @@ public class EditProfileController implements Initializable{
             outputToServer.flush();
             user = ((User) inputFromServer.readObject());
             nameLabel.setText(user.userFirstInfo.fullName);
+            bioLabel.setText(user.bio);
         }catch (IOException e){
             System.out.println("editProfile couldn't connect to server :(");
             e.printStackTrace();

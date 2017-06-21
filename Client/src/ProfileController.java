@@ -2,6 +2,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,17 +15,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sun.awt.shell.ShellFolder;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by noyz on 6/20/17.
  */
-public class ProfileController {
+public class ProfileController implements Initializable {
+    User user;
+    @FXML Label bioLabel;
     @FXML
-    Label UsernameTitle;
+    public Label UsernameTitle;
     public String username;
     @FXML
     ImageView profilePicture;
@@ -46,8 +49,8 @@ public class ProfileController {
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             editProfileStage.setScene(scene);
             editProfileStage.show();*/
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage.close();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             Pane root=loader.load(getClass().getResource("EditProfile.fxml").openStream());
@@ -78,6 +81,18 @@ public class ProfileController {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
                 Image image = new Image(imageInputStream);
                 profilePicture.setImage(image);
+                user.setProfilePicture(file);
+                try{
+                    Socket server = new Socket("127.0.0.1", 1234);
+                    ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+                    ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+                    outputToServer.writeObject("write user");
+                    outputToServer.flush();
+                    outputToServer.writeObject(username);
+                    outputToServer.writeObject(user);
+                }catch(IOException e){
+                    System.out.println("Error in setProfilePicture writing Image to Server");
+                }
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
                 e.printStackTrace();
@@ -85,4 +100,39 @@ public class ProfileController {
         }
         System.out.println(file);
     }
+    public void init(){
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+            outputToServer.writeObject("get user");
+            outputToServer.flush();
+            outputToServer.writeObject(username);
+            outputToServer.flush();
+            user = ((User) inputFromServer.readObject());
+            if(user.profilePicture!=null) {
+                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
+                Image image = new Image(imageInputStream);
+                profilePicture.setImage(image);
+            }
+        }catch (IOException e){
+            System.out.println("Error while loading initialize method in Profile");
+        }catch (ClassNotFoundException e){
+            System.out.println("WTF CLASS NOT FOUND ????! IN INITIALIZE OF PROFILE");
+        }
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        //profilePicture.setImage();
+/*        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+            outputToServer.writeObject("get_init");
+
+        }catch (IOException e){
+            System.out.println("Error while loading initialize method in Profile");
+            e.printStackTrace();*/
+        }
 }

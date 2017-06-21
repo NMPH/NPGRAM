@@ -1,4 +1,8 @@
 
+import javafx.scene.image.Image;
+import sun.misc.JavaObjectInputStreamAccess;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
@@ -20,7 +24,7 @@ class User implements Serializable{
     ArrayList<String> friendsUsernames;
     boolean isPrivate;
     String bio;
-    BufferedImage profilePicture;
+    File profilePicture;
     ArrayList<Post> posts;
     UserFirstInfo userFirstInfo;
     User(UserFirstInfo userFirstInfo){
@@ -28,13 +32,17 @@ class User implements Serializable{
         isPrivate=false;
         posts = new ArrayList<Post>();
     }
+
+    public void setProfilePicture(File profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }
 class Post implements Serializable{
     ArrayList<String> likes;
     ArrayList<NPComment> comments;
     String caption;
-    BufferedImage image;
-    Post(BufferedImage image){
+    File image;
+    Post(File image){
         this.image=image;
     }
 }
@@ -198,6 +206,11 @@ class SocketHandler implements Runnable {
                     String password = ((String) inputFromSocket.readObject());
                     UserFirstInfo newUserFirstInfo = new UserFirstInfo(fullName, username, password);
                     User newUser = new User(newUserFirstInfo);
+                    //setting initImage
+                   /* File userInitImage = new File("data/InitData/initImage.jpg");
+                    System.out.println(userInitImage.exists());
+                    FileInputStream userFileInputStream = new FileInputStream(userInitImage);
+                    newUser.setProfilePicture(userInitImage);*/
                     File newUserFolder = new File("data/Users/"+ newUser.userFirstInfo.username);
                     newUserFolder.mkdir();
                     File newUserFile = new File("data/Users/"+ newUser.userFirstInfo.username +"/" + "users.ser");
@@ -224,8 +237,15 @@ class SocketHandler implements Runnable {
                     outputToSocket.writeBoolean(true);
                     outputToSocket.flush();
                     userFileInput.close();
+                    //userFileInputStream.close();
+                    //userFileObjectInputStream.close();
                     break;
                 }
+         /*       case "get_init":{
+                    File initFolder=new File("data/InitData");
+
+                    break;
+                }*/
             }
         } catch (ClassNotFoundException e) {
             System.out.println("IN RUN PROBLEM CLASS NOT FOUND");
