@@ -7,53 +7,86 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by noyz on 6/18/17.
  */
+
 /**
  * User class has all information about user's data
  * this class will get completed during the developement
  * every time the User class changes the serialized file should be deleted and made again because the class has changed
  */
-class User implements Serializable{
-    ArrayList<String> friendsUsernames;
+class User implements Serializable {
+    HashSet<String> followingsUsernames;
+    HashSet<String> followersUsernames;
+    HashSet<String> followRequestsSent;
+    HashSet<String> followRequestsRecieved;
     boolean isPrivate;
     String bio;
     File profilePicture;
     ArrayList<Post> posts;
     UserFirstInfo userFirstInfo;
-    User(UserFirstInfo userFirstInfo){
-        this.userFirstInfo=userFirstInfo;
-        isPrivate=false;
+
+    User(UserFirstInfo userFirstInfo) {
+        this.userFirstInfo = userFirstInfo;
+        isPrivate = false;
         posts = new ArrayList<Post>();
+        followersUsernames = new HashSet<String>();
+        followingsUsernames = new HashSet<String>();
+        followRequestsSent = new HashSet<String>();
+        followRequestsRecieved = new HashSet<String>();
+
+    }
+
+    public boolean isFollowedBy(String username) {
+        if (followersUsernames.contains(username))
+            return true;
+        return false;
+    }
+    public boolean isFollowRequestSent(String username){
+        if(this.followRequestsSent.contains(username))
+            return true;
+        return false;
+    }
+    public boolean isFollowRequestRecieved(String username){
+        if(this.followRequestsRecieved.contains(username))
+            return true;
+        return false;
+    }
+    public boolean isFollowing(String username) {
+        if (followingsUsernames.contains(username))
+            return true;
+        return false;
     }
 
     public void setProfilePicture(File profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
-class Post implements Serializable{
+
+class Post implements Serializable {
     ArrayList<String> likes;
     ArrayList<NPComment> comments;
     String caption;
     File image;
-    Post(File image){
-        this.image=image;
+
+    Post(File image) {
+        this.image = image;
     }
 }
-class NPComment{
+
+class NPComment {
     String username;
     String text;
-    NPComment(String text, String username){
-        this.text=text;
-        this.username=username;
+
+    NPComment(String text, String username) {
+        this.text = text;
+        this.username = username;
     }
 }
+
 /*
 the information which is entered on sign up
  */
@@ -73,6 +106,7 @@ class SocketAndStreams {
     Socket socket;
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
+
     SocketAndStreams(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;
         this.socket = socket;
@@ -95,38 +129,39 @@ class SocketHandler implements Runnable {
     public void run() {
         try {
             String command = (String) inputFromSocket.readObject();
-            if(command.equals("get user")){
-                command=command;
+            if (command.equals("get user")) {
+                command = command;
             }
             switch (command) {
-                case "login":{
+                case "login": {
                     String usernameEntered = ((String) inputFromSocket.readObject());
                     String passwordEntered = ((String) inputFromSocket.readObject());
                     File usersFile = new File("data/users.ser");
+                    System.out.println(usersFile.exists());
                     ObjectInputStream userFileInput = new ObjectInputStream(new FileInputStream(usersFile));
                     ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
                     Iterator<UserFirstInfo> userFirstInfoIterator = users.iterator();
                     boolean isLoginCorrect = false;
-                    while(userFirstInfoIterator.hasNext()){
+                    while (userFirstInfoIterator.hasNext()) {
                         UserFirstInfo userFirstInfo = userFirstInfoIterator.next();
-                        if(userFirstInfo.username.equals(usernameEntered)){
-                            if(userFirstInfo.password.equals(passwordEntered)){
+                        if (userFirstInfo.username.equals(usernameEntered)) {
+                            if (userFirstInfo.password.equals(passwordEntered)) {
                                 outputToSocket.writeBoolean(true);
-                                isLoginCorrect=true;
+                                isLoginCorrect = true;
                             }
                         }
                     }
-                    if(!isLoginCorrect)
+                    if (!isLoginCorrect)
                         outputToSocket.writeBoolean(false);
                     outputToSocket.flush();
                     userFileInput.close();
                     break;
                 }
-                case "write user":{
+                case "write user": {
                     String oldUsername = ((String) inputFromSocket.readObject());
                     User newUserFile = ((User) inputFromSocket.readObject());
-                    File userFile = new File("data/Users/"+ oldUsername +"/" + "users.ser");
-                    File userFolder = new File("data/Users/"+ oldUsername);
+                    File userFile = new File("data/Users/" + oldUsername + "/" + "users.ser");
+                    File userFolder = new File("data/Users/" + oldUsername);
                     File allUserFile = new File("data/users.ser");
                     try {
                         //changing user file to the new one
@@ -138,10 +173,10 @@ class SocketHandler implements Runnable {
                         ObjectInputStream userInput = new ObjectInputStream(allUserFileInputStream);
                         ArrayList<UserFirstInfo> usersArrayList = (ArrayList<UserFirstInfo>) (userInput.readObject());
                         Iterator<UserFirstInfo> userFirstInfoIterator = usersArrayList.iterator();
-                        while(userFirstInfoIterator.hasNext()){
+                        while (userFirstInfoIterator.hasNext()) {
                             UserFirstInfo thisUserFirstInfo = userFirstInfoIterator.next();
                             //not changing it!!!
-                            if(thisUserFirstInfo.username.equals(oldUsername)){
+                            if (thisUserFirstInfo.username.equals(oldUsername)) {
                                 //thisUserFirstInfo=newUserFile.userFirstInfo;
                                 userFirstInfoIterator.remove();
                                 usersArrayList.add(newUserFile.userFirstInfo);
@@ -152,28 +187,28 @@ class SocketHandler implements Runnable {
                         allUserFileOutputStream.writeObject(usersArrayList);
                         allUserFileOutputStream.close();
                         allUserFileInputStream.close();
-                    }catch(IOException e){
+                    } catch (IOException e) {
                         System.out.println("Problem while writing user");
                         e.printStackTrace();
                     }
-                    if(!newUserFile.userFirstInfo.username.equals(oldUsername)){
+                    if (!newUserFile.userFirstInfo.username.equals(oldUsername)) {
                         /*
                         this is not just writing!
                         we should also change the folder name because the username has changed!!!
                          */
-                        File newName=new File("data/Users/"+ newUserFile.userFirstInfo.username);
+                        File newName = new File("data/Users/" + newUserFile.userFirstInfo.username);
                         userFolder.renameTo(newName);
 
-                        }else{
-                            //just write!
+                    } else {
+                        //just write!
 
-                        }
+                    }
 
                     break;
                 }
-                case "get user":{
+                case "get user": {
                     String username = ((String) inputFromSocket.readObject());
-                    File userFile = new File("data/Users/"+username+"/"+"users.ser");
+                    File userFile = new File("data/Users/" + username + "/" + "users.ser");
                     FileInputStream userFileInputStream = new FileInputStream(userFile);
                     outputToSocket.writeObject(new ObjectInputStream(userFileInputStream).readObject());
                     outputToSocket.flush();
@@ -211,15 +246,15 @@ class SocketHandler implements Runnable {
                     System.out.println(userInitImage.exists());
                     FileInputStream userFileInputStream = new FileInputStream(userInitImage);
                     newUser.setProfilePicture(userInitImage);*/
-                    File newUserFolder = new File("data/Users/"+ newUser.userFirstInfo.username);
+                    File newUserFolder = new File("data/Users/" + newUser.userFirstInfo.username);
                     newUserFolder.mkdir();
-                    File newUserFile = new File("data/Users/"+ newUser.userFirstInfo.username +"/" + "users.ser");
+                    File newUserFile = new File("data/Users/" + newUser.userFirstInfo.username + "/" + "users.ser");
                     newUserFile.createNewFile();
                     try {
                         ObjectOutputStream usersOutputStream = new ObjectOutputStream(new FileOutputStream(newUserFile));
                         usersOutputStream.writeObject(newUser);
                         usersOutputStream.close();
-                    }catch (IOException e){
+                    } catch (IOException e) {
                         System.out.println("Problem while serializing the user data");
                         e.printStackTrace();
                     }
@@ -261,6 +296,7 @@ class Waiter implements Runnable {
     static int count;
     ServerSocket server;
     ArrayList<SocketAndStreams> sockets;
+
     Waiter(ServerSocket server) {
         sockets = new ArrayList<SocketAndStreams>();
         this.server = server;
@@ -293,7 +329,7 @@ class Waiter implements Runnable {
 public class Server {
     public static void inits() {
         File usersDir = new File("data/Users");
-        if(!usersDir.exists()){
+        if (!usersDir.exists()) {
             usersDir.mkdirs();
         }
         File users_file = new File("data/users.ser");
@@ -305,7 +341,7 @@ public class Server {
                 userOutput.writeObject(users);
                 userOutput.close();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Problem in initing data users.ser");
         }

@@ -46,10 +46,13 @@ public class Showings  {
         }
 
     }
-    public static void showSearch(Object classObject){
+    public static void showSearch(Object classObject,String myUsername){
         try{
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new SearchController(myUsername);
+            });
             Parent root=loader.load(classObject.getClass().getResource("Search.fxml").openStream());
             SearchController searchController=(SearchController) loader.getController();
             Scene scene=new Scene(root);
@@ -61,12 +64,12 @@ public class Showings  {
             System.out.println("problem in showSearch function in Showings");
         }
     }
-    public static void showPeopleProfile(Object classObject,String username){
+    public static void showPeopleProfile(Object classObject,String usernamePeople,String myUsername){
         try{
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
-                return new PeopleProfileController(username);
+                return new PeopleProfileController(usernamePeople, myUsername);
             });
             Pane root=loader.load(classObject.getClass().getResource("PeopleProfile.fxml").openStream());
             PeopleProfileController peopleProfileController=(PeopleProfileController) loader.getController();

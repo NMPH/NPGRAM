@@ -40,7 +40,7 @@ public class ProfileController implements Initializable {
     @FXML
     Label searchLabel;
     public void search(Event event){
-        Showings.showSearch(this);
+        Showings.showSearch(this,username);
   /*      try{
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
