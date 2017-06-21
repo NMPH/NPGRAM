@@ -1,0 +1,43 @@
+#bp{
+	-fx-background-color: #C09f80;
+}
+#title{
+        -fx-font-size: 32px;
+        -fx-font-family: "Arial Black";
+        -fx-fill: #818181;
+        -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+#label{
+    -fx-text-fill:  #565656;
+}
+#loginFailure{
+    -fx-text-fill:  #565656;
+}
+#SignUpButton{
+-fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-background-color:#76323F;
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+#LoginButton{
+    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-background-color:#76323F;
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+#editProfileButton {
+       -fx-background-color:
+             #000000,
+             linear-gradient(#7ebcea, #2f4b8f),
+             linear-gradient(#426ab7, #263e75),
+             linear-gradient(#395cab, #223768);
+         -fx-background-insets: 0,1,2,3;
+         -fx-background-radius: 3,2,2,2;
+         -fx-padding: 12 30 12 30;
+         -fx-text-fill: white;
+         -fx-font-size: 12px;
+ }
