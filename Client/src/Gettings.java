@@ -1,0 +1,101 @@
+import javafx.scene.image.Image;
+
+import java.io.*;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+
+/**
+ * Created by noyz on 6/21/17.
+ */
+public class Gettings {
+    public static boolean userExists(String username) {
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
+            objectOutputStream.writeObject("get users");
+            objectOutputStream.flush();
+            HashSet<String> usernames = ((HashSet<String>) objectInputStream.readObject());
+            Iterator<String> usernameIterator = usernames.iterator();
+            while (usernameIterator.hasNext()) {
+                if (usernameIterator.next().equals(username))
+                    return true;
+            }
+            return false;
+        } catch (IOException e) {
+            System.out.println("problem in userExists func");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("wtf class not found??!!! userExists func");
+        }
+        return false;
+    }
+    public static HashSet<String> getUsers(){
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
+            objectOutputStream.writeObject("get users");
+            objectOutputStream.flush();
+            HashSet<String> usernames = ((HashSet<String>) objectInputStream.readObject());
+            return usernames;
+        }catch (IOException e){
+            System.out.println("Problem in Gettings.getUsers");
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            System.out.println("WTF CLASS NOT FOUND??!!! in Getting.getUsers");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static User getUser(String username) {
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+            outputToServer.writeObject("get user");
+            outputToServer.flush();
+            outputToServer.writeObject(username);
+            outputToServer.flush();
+            return ((User) inputFromServer.readObject());
+        } catch (IOException e) {
+            System.out.println("Error while loading initialize method in Profile");
+        } catch (ClassNotFoundException e) {
+            System.out.println("WTF CLASS NOT FOUND ????! IN INITIALIZE OF PROFILE");
+        }
+        return null;
+    }
+
+    public static void writeUser(String username, User user) {
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+            outputToServer.writeObject("write user");
+            outputToServer.flush();
+            outputToServer.writeObject(username);
+            outputToServer.writeObject(user);
+        } catch (IOException e) {
+            System.out.println("problem is writeUser()");
+        }
+    }
+
+    public static boolean isLogin(String username, String password) {
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
+            outputToServer.writeObject("login");
+            outputToServer.writeObject(username);
+            outputToServer.writeObject(password);
+            outputToServer.flush();
+            return inputFromServer.readBoolean();
+        } catch (IOException e) {
+            System.out.println("problem is isLogin() on GETTINGS");
+            e.printStackTrace();
+        }
+        return false;
+    }
+}

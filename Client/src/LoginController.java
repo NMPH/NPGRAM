@@ -1,4 +1,5 @@
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -33,35 +34,22 @@ public class LoginController {
     private Label loginFailure;
     public void Login(ActionEvent event) {
         try {
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("login");
-            outputToServer.writeObject(usernameText.getText());
-            outputToServer.writeObject(passwordText.getText());
-            outputToServer.flush();
-            boolean isLogin= inputFromServer.readBoolean();
+            boolean isLogin= Gettings.isLogin(usernameText.getText(),passwordText.getText());
             if(isLogin){
                 setUser(usernameText.getText());
-               /* Stage profileStage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("Profile.fxml"));
-                Scene scene = new Scene(root,600,400);
-                profileStage.setScene(scene);
-                profileStage.show();*/
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
                 Stage primaryStage=new Stage();
                 FXMLLoader loader=new FXMLLoader();
+                loader.setControllerFactory(c -> {
+                    return new ProfileController(usernameText.getText());
+                });
                 Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
                 ProfileController profileController=(ProfileController) loader.getController();
-                profileController.username=usernameText.getText();
-                profileController.init();
-                profileController.bioLabel.setText(user.bio);
                 Scene scene = new Scene(root,600,400);
                 scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.show();
-              //  profileController.setFullname(FullNameText);
                 System.out.println("LOGIN!!!");
             }else{
                 loginFailure.setText("invalid username or password");
@@ -90,22 +78,6 @@ public class LoginController {
         label.setText(str);
     }
     public void setUser(String username){
-        try{
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("get user");
-            outputToServer.flush();
-            outputToServer.writeObject(username);
-            outputToServer.flush();
-            user = ((User) inputFromServer.readObject());
-        }catch (IOException e){
-            System.out.println("editProfile couldn't connect to server :(");
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e){
-            System.out.println("CLASS NOT FOUND EXCEPTION IN editProfileController");
-            e.printStackTrace();
-        }
+            user = Gettings.getUser(username);
     }
 }

@@ -24,6 +24,10 @@ import java.util.ResourceBundle;
  * Created by noyz on 6/20/17.
  */
 public class ProfileController implements Initializable {
+    ProfileController(String username){
+        this.username=username;
+        user= Gettings.getUser(username);
+    }
     User user;
     @FXML Label bioLabel;
     @FXML
@@ -33,40 +37,27 @@ public class ProfileController implements Initializable {
     ImageView profilePicture;
     @FXML
     Button editProfileButton;
-
-    public void setUsername(String username){
-        this.username=username;
-        UsernameTitle.setText(username);
-    }
-   /* public void setFullname(String Fullname){
-        this.Fullname=Fullname;
-    }*/
-    public void editProfilePageOpener(ActionEvent event){
-        try {
-       /*     Stage editProfileStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("EditProfile.fxml"));
-            Scene scene = new Scene(root, 600, 400);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            editProfileStage.setScene(scene);
-            editProfileStage.show();*/
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
+    @FXML
+    Label searchLabel;
+    public void search(Event event){
+        Showings.showSearch(this);
+  /*      try{
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
-            Pane root=loader.load(getClass().getResource("EditProfile.fxml").openStream());
-            EditProfileController editProfileController=(EditProfileController) loader.getController();
-            editProfileController.setUsernameLabel(username);
-            //editProfileController.setFullnameLabel(Fullname);
-           // System.out.println(Fullname+"gh");
+            Parent root=loader.load(getClass().getResource("a.fxml").openStream());
             Scene scene=new Scene(root);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
 
         }catch (IOException e){
-            System.out.println("edit profile opening problem");
-            e.printStackTrace();
-        }
+            System.out.println("problem in showSearch function in Showings");
+        }*/
+    }
+    public void editProfilePageOpener(ActionEvent event){
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+            Showings.showEditProfile(this,username);
     }
     public void setProfilePicture(Event event){
         FileChooser fileChooser = new FileChooser();
@@ -82,17 +73,7 @@ public class ProfileController implements Initializable {
                 Image image = new Image(imageInputStream);
                 profilePicture.setImage(image);
                 user.setProfilePicture(file);
-                try{
-                    Socket server = new Socket("127.0.0.1", 1234);
-                    ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-                    ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-                    outputToServer.writeObject("write user");
-                    outputToServer.flush();
-                    outputToServer.writeObject(username);
-                    outputToServer.writeObject(user);
-                }catch(IOException e){
-                    System.out.println("Error in setProfilePicture writing Image to Server");
-                }
+               Gettings.writeUser(username,user);
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
                 e.printStackTrace();
@@ -100,39 +81,22 @@ public class ProfileController implements Initializable {
         }
         System.out.println(file);
     }
-    public void init(){
-        try {
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("get user");
-            outputToServer.flush();
-            outputToServer.writeObject(username);
-            outputToServer.flush();
-            user = ((User) inputFromServer.readObject());
-            if(user.profilePicture!=null) {
-                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
-                Image image = new Image(imageInputStream);
-                profilePicture.setImage(image);
-            }
-        }catch (IOException e){
-            System.out.println("Error while loading initialize method in Profile");
-        }catch (ClassNotFoundException e){
-            System.out.println("WTF CLASS NOT FOUND ????! IN INITIALIZE OF PROFILE");
-        }
-    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //profilePicture.setImage();
-/*        try {
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("get_init");
-
+        Image profileImage=null;
+        try {
+            if (user.profilePicture != null) {
+                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
+                profileImage = new Image(imageInputStream);
+            }
         }catch (IOException e){
-            System.out.println("Error while loading initialize method in Profile");
-            e.printStackTrace();*/
+            System.out.println("problem in reading the user profile picture in ProfileController()");
+            e.printStackTrace();
         }
+        if(profileImage!=null) {
+            profilePicture.setImage(profileImage);
+        }
+        bioLabel.setText(user.bio);
+
+    }
 }

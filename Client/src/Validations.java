@@ -10,25 +10,12 @@ import java.util.Iterator;
  */
 public class Validations {
     public static boolean isValidUserName(String userName) {
-        try {
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
-            objectOutputStream.writeObject("get users");
-            objectOutputStream.flush();
-            HashSet<String> usernames = ((HashSet<String>) objectInputStream.readObject());
+            HashSet<String> usernames =Gettings.getUsers();
             Iterator<String> usernameIterator = usernames.iterator();
             while(usernameIterator.hasNext()){
                 if(usernameIterator.next().equals(userName))
                     return false;
             }
-
-        }catch (IOException e){
-            System.out.println("validation problem username");
-            e.printStackTrace();
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
         //also not duplicated should be checked
         if (userName.length() < 4)
             return false;

@@ -21,6 +21,11 @@ import java.util.ResourceBundle;
  * Created by noyz on 6/20/17.
  */
 public class EditProfileController implements Initializable{
+    EditProfileController(String username){
+        this.username=username;
+        user=Gettings.getUser(username);
+    }
+    String username;
     User user;
     @FXML
     Label changingFailure;
@@ -31,21 +36,7 @@ public class EditProfileController implements Initializable{
     @FXML
     TextField nameLabel,usernameLabel,bioLabel;
     public void exitEditProfileLabelclick(Event event){
-        try {
-            Stage profileStage = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            Pane root = loader.load(getClass().getResource("Profile.fxml").openStream());
-            ProfileController profileController=(ProfileController) loader.getController();
-            profileController.username=user.userFirstInfo.username;
-            profileController.bioLabel.setText(user.bio);
-            profileController.init();
-            Scene profileScene = new Scene(root, 650, 400);
-            profileStage.setScene(profileScene);
-            profileStage.show();
-        }catch (IOException e){
-            System.out.println("Error while pushing x label in editProfile");
-            e.printStackTrace();
-        }
+        Showings.showProfile(this,username);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -69,71 +60,19 @@ public class EditProfileController implements Initializable{
         user.bio=bio;
         user.userFirstInfo.username=username;
         user.userFirstInfo.fullName=name;
-        try{
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("write user");
-            outputToServer.flush();
-            outputToServer.writeObject(oldUsername);
-            outputToServer.writeObject(user);
-            //changing profile username
-            Stage profileStage = new Stage();
-            FXMLLoader loader=new FXMLLoader();
-            Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
-            ProfileController profileController=(ProfileController) loader.getController();
-            //here we should load the profile stage
-            profileController.username=username;
-            profileController.init();
-            profileController.bioLabel.setText(user.bio);
-            profileController.UsernameTitle.setText(username);
-            Scene profileScene = new Scene(root,650,400);
-            profileStage.setScene(profileScene);
-            profileStage.show();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
-        }catch (IOException e){
-            System.out.println("Problem when trying to writing new new user when DONE label is clicked");
-            e.printStackTrace();
-        }
+        Gettings.writeUser(oldUsername,user);
+        Showings.showProfile(this,username);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
-    public void setUsernameLabel(String username){
+    public void setFields(String username){
         usernameLabel.setText(username);
-        try{
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
-            outputToServer.writeObject("get user");
-            outputToServer.flush();
-            outputToServer.writeObject(username);
-            outputToServer.flush();
-            user = ((User) inputFromServer.readObject());
-            nameLabel.setText(user.userFirstInfo.fullName);
-            bioLabel.setText(user.bio);
-        }catch (IOException e){
-            System.out.println("editProfile couldn't connect to server :(");
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e){
-            System.out.println("CLASS NOT FOUND EXCEPTION IN editProfileController");
-            e.printStackTrace();
-        }
+        nameLabel.setText(user.userFirstInfo.fullName);
+        bioLabel.setText(user.bio);
     }
-   /* public void setFullnameLabel(String username){
-        bioLabel.setText(username);
-    }*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            Socket server = new Socket("127.0.0.1", 1234);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(server.getOutputStream());
-            ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
-            System.out.println("Hi");
-            //objectOutputStream.writeObject("");
-        }catch (IOException e){
-            System.out.println("editProfile couldn't connect to server :(");
-            e.printStackTrace();
-        }
+        setFields(username);
 
     }
 }
