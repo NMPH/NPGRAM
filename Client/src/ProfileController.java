@@ -1,23 +1,30 @@
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import sun.awt.shell.ShellFolder;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
@@ -29,6 +36,8 @@ public class ProfileController implements Initializable {
         user= Gettings.getUser(username);
     }
     User user;
+    @FXML
+    Hyperlink pendingFollowRequests;
     @FXML Label bioLabel;
     @FXML
     public Label UsernameTitle;
@@ -38,21 +47,48 @@ public class ProfileController implements Initializable {
     @FXML
     Button editProfileButton;
     @FXML
-    Label searchLabel;
-    public void search(Event event){
-        Showings.showSearch(this,username);
-  /*      try{
-            Stage primaryStage=new Stage();
-            FXMLLoader loader=new FXMLLoader();
-            Parent root=loader.load(getClass().getResource("a.fxml").openStream());
-            Scene scene=new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
+    Label searchLabel,postLabel,followersLabel,followingsLabel;
 
-        }catch (IOException e){
-            System.out.println("problem in showSearch function in Showings");
-        }*/
+
+    public void PendingFollowRequestsPageOpener(Event event){
+        //Showings.showFollowRequestsList(this,username);
+        Stage primaryStage = new Stage();
+        StackPane pane = new StackPane();
+        Scene scene = new Scene(pane, 300, 150);
+        primaryStage.setScene(scene);
+        ObservableList<String> list = FXCollections.observableArrayList();
+        Iterator<String> followReqs = user.followRequestsRecieved.iterator();
+        while(followReqs.hasNext()){
+            list.add(followReqs.next());
+        }
+        ListView<String> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new FollowRequestCell(user);
+            }
+        });
+        pane.getChildren().add(lv);
+        primaryStage.show();
+
+    }
+    public void search(Event event){
+        Stage searchStage= Showings.showSearch(this,username);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+        searchStage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Showings.showProfile(this,username);
+                    }
+                });
+            }
+        });
     }
     public void editProfilePageOpener(ActionEvent event){
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -97,6 +133,7 @@ public class ProfileController implements Initializable {
             profilePicture.setImage(profileImage);
         }
         bioLabel.setText(user.bio);
-
+        followersLabel.setText(new Integer(user.followersUsernames.size()).toString());
+        followingsLabel.setText(new Integer(user.followingsUsernames.size()).toString());
     }
 }

@@ -24,6 +24,8 @@ public class PeopleProfileController implements Initializable{
     Label bioLabel;
     @FXML
     Button followButton,unFollowButton;
+    @FXML
+    Label followersLabel,followingsLabel;
     public PeopleProfileController(String userPeopleUsername, String myUsername){
         userPeople = Gettings.getUser(userPeopleUsername);
         myUser=Gettings.getUser(myUsername);
@@ -67,5 +69,7 @@ public class PeopleProfileController implements Initializable{
             profilePicture.setImage(profileImage);
         }
         this.bioLabel.setText(userPeople.bio);
+        followersLabel.setText(new Integer(userPeople.followersUsernames.size()).toString());
+        followingsLabel.setText(new Integer(userPeople.followingsUsernames.size()).toString());
     }
 }

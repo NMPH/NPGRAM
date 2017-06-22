@@ -46,9 +46,10 @@ public class Showings  {
         }
 
     }
-    public static void showSearch(Object classObject,String myUsername){
+    public static Stage showSearch(Object classObject,String myUsername){
+        Stage primaryStage= null;
         try{
-            Stage primaryStage=new Stage();
+            primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
                 return new SearchController(myUsername);
@@ -63,10 +64,32 @@ public class Showings  {
         }catch (IOException e){
             System.out.println("problem in showSearch function in Showings");
         }
+        return primaryStage;
     }
-    public static void showPeopleProfile(Object classObject,String usernamePeople,String myUsername){
+    /*public static void showFollowRequestsList(Object classObject,String myUsername){
         try{
             Stage primaryStage=new Stage();
+            FXMLLoader loader=new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new FollowRequestsListController(myUsername);
+            });
+            Pane root=loader.load(classObject.getClass().getResource("FollowRequestsList.fxml").openStream());
+            FollowRequestsListController followRequestsListController=(FollowRequestsListController) loader.getController();
+            followRequestsListController.pane=root;
+            followRequestsListController.init();
+            Scene scene=new Scene(root);
+            scene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+        }catch (IOException e){
+            System.out.println("problem in showSearch function in Showings");
+        }
+    }*/
+    public static Stage showPeopleProfile(Object classObject,String usernamePeople,String myUsername){
+        Stage primaryStage=null;
+        try{
+            primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
                 return new PeopleProfileController(usernamePeople, myUsername);
@@ -81,6 +104,7 @@ public class Showings  {
         }catch (IOException e){
             System.out.println("problem in search function in PeopleProfileController");
         }
+        return primaryStage;
     }
     /*public static <ControllerType> void showPage(Object classObject,String username,String fxml, Method controllerConstructor){
         try {

@@ -1,9 +1,13 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,7 +35,20 @@ public class SearchController implements Initializable{
     public void searchButtonAction(ActionEvent event){
         String usernameToSearch = usernameToSearchTextField.getText();
         if(Gettings.userExists(usernameToSearch)){
-            Showings.showPeopleProfile(this,usernameToSearch, myUsername);
+            Stage peopleProfileStage= Showings.showPeopleProfile(this,usernameToSearch, myUsername);
+            peopleProfileStage.setOnHiding(new EventHandler<WindowEvent>() {
+
+                @Override
+                public void handle(WindowEvent event) {
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            System.out.println("Application Closed by click to Close Button(X)");
+                        }
+                    });
+                }
+            });
         }else{
             userNotFoundLabel.setText("username not found..");
         }

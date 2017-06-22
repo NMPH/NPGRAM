@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -96,6 +97,11 @@
                               <Insets bottom="25.0" left="90.0" />
                            </VBox.margin>
                         </Button>
+                        <Hyperlink fx:id="pendingFollowRequests" onAction="#PendingFollowRequestsPageOpener" text="Pending Follow Requests">
+                           <VBox.margin>
+                              <Insets left="65.0" />
+                           </VBox.margin>
+                        </Hyperlink>
                      </children>
                      <HBox.margin>
                         <Insets />
