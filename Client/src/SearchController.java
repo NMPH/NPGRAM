@@ -18,6 +18,10 @@ import java.util.ResourceBundle;
  * Created by noyz on 6/21/17.
  */
 public class SearchController implements Initializable{
+    SearchController(String myUsername){
+        this.myUsername=myUsername;
+    }
+    String myUsername;
     @FXML
     Label userNotFoundLabel;
     @FXML
@@ -27,7 +31,7 @@ public class SearchController implements Initializable{
     public void searchButtonAction(ActionEvent event){
         String usernameToSearch = usernameToSearchTextField.getText();
         if(Gettings.userExists(usernameToSearch)){
-            Showings.showPeopleProfile(this,usernameToSearch);
+            Showings.showPeopleProfile(this,usernameToSearch, myUsername);
         }else{
             userNotFoundLabel.setText("username not found..");
         }

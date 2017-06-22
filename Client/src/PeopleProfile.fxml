@@ -90,12 +90,13 @@
                                         <Insets bottom="25.0" />
                                     </VBox.margin>
                                 </HBox>
+                        <Button fx:id="unFollowButton" mnemonicParsing="false" onAction="#unFollowButtonClicked" text="Unfollow" />
                                 <Button fx:id="editProfileButton" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Block">
                                     <VBox.margin>
                                         <Insets bottom="-25.0" left="160.0" />
                                     </VBox.margin>
                                 </Button>
-                        <Button fx:id="editProfileButton1" layoutX="100.0" layoutY="95.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Follow">
+                        <Button fx:id="followButton" layoutX="100.0" layoutY="95.0" mnemonicParsing="false" onAction="#followButtonClicked" prefHeight="22.0" prefWidth="125.0" text="Follow">
                            <VBox.margin>
                               <Insets bottom="10.0" left="20.0" />
                            </VBox.margin>
