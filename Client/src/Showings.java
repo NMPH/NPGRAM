@@ -21,6 +21,7 @@ public class Showings  {
             Pane root=loader.load(classObject.getClass().getResource("Profile.fxml").openStream());
             ProfileController profileController=(ProfileController) loader.getController();
             Scene profileScene = new Scene(root,650,400);
+            profileScene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
             profileStage.setScene(profileScene);
             profileStage.show();
         }catch (IOException e){

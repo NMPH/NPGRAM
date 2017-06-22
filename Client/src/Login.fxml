@@ -78,7 +78,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Label fx:id="loginFailure">
+                  <Label fx:id="loginFailure" textFill="#19c6c9">
                      <HBox.margin>
                         <Insets left="10.0" top="20.0" />
                      </HBox.margin>
