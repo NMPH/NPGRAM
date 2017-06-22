@@ -41,7 +41,7 @@ public class ProfileController implements Initializable {
     Label searchLabel;
     public void search(Event event){
         Showings.showSearch(this,username);
-  /*      try{
+        try{
             Stage primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             Parent root=loader.load(getClass().getResource("a.fxml").openStream());
@@ -52,7 +52,7 @@ public class ProfileController implements Initializable {
 
         }catch (IOException e){
             System.out.println("problem in showSearch function in Showings");
-        }*/
+        }
     }
     public void editProfilePageOpener(ActionEvent event){
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -97,6 +97,6 @@ public class ProfileController implements Initializable {
             profilePicture.setImage(profileImage);
         }
         bioLabel.setText(user.bio);
-
+        UsernameTitle.setText(user.userFirstInfo.username);
     }
 }

@@ -73,6 +73,5 @@ public class EditProfileController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setFields(username);
-
     }
 }

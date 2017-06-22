@@ -1,17 +1,17 @@
 #bp{
-	-fx-background-color: #C09f80;
+	-fx-background: linear-gradient(to right,  #3A1C71 0%,#D76D77 75%,#FFAF7B 100%);
 }
 #title{
         -fx-font-size: 32px;
         -fx-font-family: "Arial Black";
-        -fx-fill: #818181;
+        -fx-fill: #76323F;
         -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
-#label{
-    -fx-text-fill:  #565656;
+#badLoginInputsLabel{
+    -fx-text-fill:  #000000;
 }
 #loginFailure{
-    -fx-text-fill:  #565656;
+    -fx-text-fill:  #000000;
 }
 #SignUpButton{
 -fx-background-color: linear-gradient(#2A5058, #61a2b1);
