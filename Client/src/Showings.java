@@ -87,6 +87,27 @@ public class Showings  {
             System.out.println("problem in showSearch function in Showings");
         }
     }*/
+    public static Stage showAddPost(Object classObject,String myUsername){
+        Stage primaryStage= null;
+        try{
+            primaryStage=new Stage();
+            FXMLLoader loader=new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new PostMakeController(myUsername);
+            });
+            Parent root=loader.load(classObject.getClass().getResource("PostMake.fxml").openStream());
+            PostMakeController postMakeController=(PostMakeController) loader.getController();
+            Scene scene=new Scene(root);
+            scene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+        }catch (IOException e){
+            System.out.println("problem in showAddPost function in Showings");
+            e.printStackTrace();
+        }
+        return primaryStage;
+    }
     public static Stage showPeopleProfile(Object classObject,String usernamePeople,String myUsername){
         Stage primaryStage=null;
         try{
@@ -104,6 +125,7 @@ public class Showings  {
 
         }catch (IOException e){
             System.out.println("problem in search function in PeopleProfileController");
+            e.printStackTrace();
         }
         return primaryStage;
     }

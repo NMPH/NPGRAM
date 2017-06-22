@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -126,12 +127,12 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label prefHeight="25.0" prefWidth="60.0" text="Home">
+            <Label fx:id="homeLabel" onMouseClicked="#openHome" prefHeight="25.0" prefWidth="60.0" text="Home">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="59.0" text="Add">
+            <Label fx:id="addPostLabel" layoutX="10.0" layoutY="10.0" onMouseClicked="#addPost" prefHeight="17.0" prefWidth="59.0" text="Add">
                <HBox.margin>
                   <Insets left="110.0" />
                </HBox.margin>
@@ -153,4 +154,7 @@
          </children>
       </HBox>
    </bottom>
+   <center>
+      <StackPane fx:id="postsPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

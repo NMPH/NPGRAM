@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,6 +38,8 @@ public class ProfileController implements Initializable {
     }
     User user;
     @FXML
+    Label addPostLabel;
+    @FXML
     Hyperlink pendingFollowRequests;
     @FXML Label bioLabel;
     @FXML
@@ -47,9 +50,66 @@ public class ProfileController implements Initializable {
     @FXML
     Button editProfileButton;
     @FXML
-    Label searchLabel,postLabel,followersLabel,followingsLabel;
+    Label searchLabel,postLabel,followersLabel,followingsLabel, homeLabel;
+    @FXML
+    StackPane postsPane;
+    public void showMyPosts(){
+        ObservableList<Post> list = FXCollections.observableArrayList();
+        Iterator<Post> postIterator = Gettings.getUser(username).posts.iterator();
+        while (postIterator.hasNext()){
+            list.add(postIterator.next());
+        }
+        ListView<Post> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<Post>, ListCell<Post>>() {
+            @Override
+            public ListCell<Post> call(ListView<Post> param) {
+                return new HomeCell(user);
+            }
+        });
+        postsPane.getChildren().add(lv);
+    }
+    public void openHome(Event event){
+        Stage primaryStage = new Stage();
+        StackPane pane = new StackPane();
+        Scene scene = new Scene(pane, 300, 150);
+        primaryStage.setScene(scene);
+        ObservableList<Post> list = FXCollections.observableArrayList();
+        Iterator<String > followingsUsernames= user.followingsUsernames.iterator();
+        while(followingsUsernames.hasNext()){
+            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.iterator();
+            while (postIterator.hasNext()){
+                list.add(postIterator.next());
+                //we've got works here!
+            }
+        }
+        ListView<Post> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<Post>, ListCell<Post>>() {
+            @Override
+            public ListCell<Post> call(ListView<Post> param) {
+                return new HomeCell(user);
+            }
+        });
+        pane.getChildren().add(lv);
+        primaryStage.show();
+    }
+    public void addPost(Event event){
+        Stage addPostStage = Showings.showAddPost(this,username);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+        addPostStage.setOnHiding(new EventHandler<WindowEvent>() {
 
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        Showings.showProfile(this,username);
+                    }
+                });
+            }
+        });
+    }
     public void PendingFollowRequestsPageOpener(Event event){
         //Showings.showFollowRequestsList(this,username);
         Stage primaryStage = new Stage();
@@ -121,6 +181,7 @@ public class ProfileController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        showMyPosts();
         Image profileImage=null;
         try {
             if (user.profilePicture != null) {
@@ -138,7 +199,7 @@ public class ProfileController implements Initializable {
 
         followersLabel.setText(new Integer(user.followersUsernames.size()).toString());
         followingsLabel.setText(new Integer(user.followingsUsernames.size()).toString());
-
+        postLabel.setText(new Integer(user.posts.size()).toString());
         UsernameTitle.setText(user.userFirstInfo.username);
     }
 }

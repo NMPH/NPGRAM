@@ -71,13 +71,19 @@ class Post implements Serializable {
     ArrayList<NPComment> comments;
     String caption;
     File image;
+    String ownerUsername;
 
-    Post(File image) {
+    Post(File image, String caption,String ownerUsername) {
+        this.ownerUsername=ownerUsername;
         this.image = image;
+        this.caption=caption;
+        comments = new ArrayList<NPComment>();
+        likes= new ArrayList<String >();
+
     }
 }
 
-class NPComment {
+class NPComment implements Serializable{
     String username;
     String text;
 
