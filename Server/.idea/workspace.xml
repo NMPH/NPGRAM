@@ -460,6 +460,7 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Server.java</url>
           <line>136</line>
+<<<<<<< HEAD
           <properties />
           <option name="timeStamp" value="16" />
         </line-breakpoint>
@@ -467,6 +468,15 @@
           <url>file://$PROJECT_DIR$/src/Server.java</url>
           <line>238</line>
           <properties />
+=======
+          <properties />
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Server.java</url>
+          <line>238</line>
+          <properties />
+>>>>>>> 4dc1d642410280107ebf9368d2cbba29bedb9f54
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
@@ -487,6 +497,7 @@
             <element signature="imports" expanded="true" />
             <element signature="e#2135#2136#0" expanded="true" />
             <element signature="e#14206#14212#0" expanded="true" />
+<<<<<<< HEAD
           </folding>
         </state>
       </provider>
@@ -499,6 +510,8 @@
             <element signature="imports" expanded="true" />
             <element signature="e#2135#2136#0" expanded="true" />
             <element signature="e#14206#14212#0" expanded="true" />
+=======
+>>>>>>> 4dc1d642410280107ebf9368d2cbba29bedb9f54
           </folding>
         </state>
       </provider>
@@ -677,12 +690,25 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2135#2136#0" expanded="true" />
+            <element signature="e#14206#14212#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
 <<<<<<< HEAD
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/io/ObjectInputStream.class" />
+=======
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Thread.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="215" column="0" lean-forward="false" selection-start-line="215" selection-start-column="0" selection-end-line="215" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+>>>>>>> 4dc1d642410280107ebf9368d2cbba29bedb9f54
 =======
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Thread.class">
       <provider selected="true" editor-type-id="text-editor">
