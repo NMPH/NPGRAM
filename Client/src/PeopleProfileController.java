@@ -40,6 +40,8 @@ public class PeopleProfileController implements Initializable{
     }
     public void unFollowButtonClicked(ActionEvent event){
         myUser.followRequestsSent.remove(userPeople.userFirstInfo.username);
+        myUser.followingsUsernames.remove(userPeople.userFirstInfo.username);
+        userPeople.followersUsernames.remove(myUser.userFirstInfo.username);
         userPeople.followRequestsRecieved.remove(myUser.userFirstInfo.username);
         Gettings.writeUser(userPeople.userFirstInfo.username,userPeople);
         Gettings.writeUser(myUser.userFirstInfo.username,myUser);

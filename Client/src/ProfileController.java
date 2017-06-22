@@ -90,20 +90,7 @@ public class ProfileController implements Initializable {
                 });
             }
         });
-        Showings.showSearch(this,username);
-        try{
-            Stage primaryStage=new Stage();
-            FXMLLoader loader=new FXMLLoader();
-            Parent root=loader.load(getClass().getResource("a.fxml").openStream());
-            Scene scene=new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        }catch (IOException e){
-            System.out.println("problem in showSearch function in Showings");
-        }
-
+        //Showings.showSearch(this,username);
     }
     public void editProfilePageOpener(ActionEvent event){
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
