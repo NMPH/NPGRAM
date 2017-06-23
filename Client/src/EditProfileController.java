@@ -1,4 +1,6 @@
+import javafx.application.Platform;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,25 +24,27 @@ import java.util.ResourceBundle;
  * Created by noyz on 6/20/17.
  */
 public class EditProfileController implements Initializable{
-    EditProfileController(String username){
+    Stage stage;
+    EditProfileController(String username,Stage stage){
         this.username=username;
         user=Gettings.getUser(username);
+        this.stage=stage;
     }
     String username;
     User user;
     @FXML
     Label changingFailure;
-    @FXML
-    Label exitEditProfileLabel;
+    /*@FXML
+    Label exitEditProfileLabel;*/
     @FXML
     Label DoneLabel;
     @FXML
     TextField nameLabel,usernameLabel,bioLabel;
-    public void exitEditProfileLabelclick(Event event){
-        Showings.showProfile(this,username);
+   /* public void exitEditProfileLabelclick(Event event){
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Showings.showProfile(this,username);
         stage.close();
-    }
+    }*/
     public void DoneLabelClick(Event event){
         String name = nameLabel.getText();
         String oldUsername = user.userFirstInfo.username;
@@ -67,8 +72,9 @@ public class EditProfileController implements Initializable{
             System.out.println("in done label interrupted exception");
             e.printStackTrace();
         }
-        Showings.showProfile(this,username);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        //Showings.showProfile(this,username);
         stage.close();
     }
     public void setFields(String username){
@@ -78,6 +84,20 @@ public class EditProfileController implements Initializable{
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        System.out.println("Application Closed by click to Close Button(X)");
+                        Showings.showProfile(this,username);
+                    }
+                });
+            }
+        });
         setFields(username);
     }
 }

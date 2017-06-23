@@ -53,6 +53,24 @@ public class ProfileController implements Initializable {
     Label searchLabel,postLabel,followersLabel,followingsLabel, homeLabel;
     @FXML
     StackPane postsPane;
+    public void showChooseChats(Event event) {
+        try {
+            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new ChooseChatController(username, primaryStage);
+            });
+            Parent root = loader.load(getClass().getResource("ChooseChat.fxml").openStream());
+            ChooseChatController chooseChatController = (ChooseChatController) loader.getController();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("Problem in showChooseChats");
+            e.printStackTrace();
+        }
+    }
     public void showFollowers(){
         Stage primaryStage = new Stage();
         StackPane pane = new StackPane();
@@ -157,7 +175,7 @@ public class ProfileController implements Initializable {
         Scene scene = new Scene(pane, 300, 150);
         primaryStage.setScene(scene);
         ObservableList<String> list = FXCollections.observableArrayList();
-        Iterator<String> followReqs = user.followRequestsRecieved.iterator();
+        Iterator<String> followReqs = Gettings.getUser(username).followRequestsRecieved.iterator();
         while(followReqs.hasNext()){
             list.add(followReqs.next());
         }
@@ -175,8 +193,8 @@ public class ProfileController implements Initializable {
     }
     public void search(Event event){
 
-        Stage searchStage= Showings.showSearch(this,username);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage searchStage= Showings.showSearch(this,username);
         stage.close();
         searchStage.setOnHiding(new EventHandler<WindowEvent>() {
 

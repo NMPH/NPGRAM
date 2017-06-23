@@ -29,7 +29,7 @@ class User implements Serializable {
     File profilePicture;
     TreeSet<Post> posts;
     UserFirstInfo userFirstInfo;
-
+    HashSet<Chat> chats;
     User(UserFirstInfo userFirstInfo) {
         this.userFirstInfo = userFirstInfo;
         isPrivate = false;
@@ -38,7 +38,21 @@ class User implements Serializable {
         followingsUsernames = new HashSet<String>();
         followRequestsSent = new HashSet<String>();
         followRequestsRecieved = new HashSet<String>();
+        chats = new HashSet<Chat>();
 
+    }
+    public HashSet<String> getChattersSet(){
+        HashSet<String> usernames = new HashSet<String>();
+        Iterator<Chat> chatIterator= chats.iterator();
+        while(chatIterator.hasNext()){
+            Chat chat = chatIterator.next();
+            if(chat.chatter1.equals(userFirstInfo.username)){
+                usernames.add(chat.chatter2);
+            }else{
+                usernames.add(chat.chatter1);
+            }
+        }
+        return usernames;
     }
     public boolean removePostByHashCode(int hashcode){
         Iterator<Post> postIterator= posts.iterator();
@@ -76,7 +90,40 @@ class User implements Serializable {
         this.profilePicture = profilePicture;
     }
 }
+class ChatMessage implements Serializable{
+    String owner;
+    String text;
+    byte[] image;
+    ChatMessage(String owner, String text,byte[] image){
+        this.text=text;
+        this.image=image;
+        this.owner=owner;
+    }
+}
+class Chat implements Serializable{
+    @Override
+    public int hashCode(){
+        return chatter1.hashCode()+chatter2.hashCode();
+    }
+    @Override
+    public  boolean equals(Object object){
+        return hashCode()==object.hashCode() ? true :false;
+    }
+    public boolean containsChatter(String chatter){
+        if(chatter1.equals(chatter)||chatter2.equals(chatter))
+            return true;
+        return false;
+    }
+    String chatter1;
+    String chatter2;
+    ArrayList<ChatMessage> chatMessages;
+    Chat(String chatter1, String chatter2){
+        this.chatter1=chatter1;
+        this.chatter2=chatter2;
+        chatMessages= new ArrayList<ChatMessage>();
+    }
 
+}
 class Post implements Serializable ,Comparable<Post>{
     @Override
     public int compareTo(Post post) {
@@ -190,7 +237,40 @@ class SocketAndStreams {
         this.objectInputStream = objectInputStream;
     }
 }
+class FileHandler{
+    synchronized public static  ArrayList<UserFirstInfo> getUsersFile(){
+        ArrayList<UserFirstInfo> users=null;
+        try {
+            File usersFile = new File("data/users.ser");
+            FileInputStream fileInputStream = new FileInputStream(usersFile);
+            ObjectInputStream userFileInput = new ObjectInputStream(fileInputStream);
+            users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+            fileInputStream.close();
+            userFileInput.close();
+        }catch (IOException e){
+            System.out.println("problem getUsersFIle");
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            System.out.println("CLASS NOT FOUND getUsersFile");
+            e.printStackTrace();
+        }
+        return users;
+    }
+    synchronized public static void writeUsersFile( ArrayList<UserFirstInfo> usersArrayList){
+        try{
+            File usersFile = new File("data/users.ser");
+            FileOutputStream fileOutputStream =new FileOutputStream(usersFile);
+            ObjectOutputStream allUserFileOutputStream = new ObjectOutputStream(fileOutputStream);
+            allUserFileOutputStream.writeObject(usersArrayList);
+            allUserFileOutputStream.close();
+            fileOutputStream.close();
+        }catch (IOException e){
+            System.out.println("writeUsersFile Exception");
+            e.printStackTrace();
+        }
+    }
 
+}
 class SocketHandler implements Runnable {
     Socket socket;
     ObjectInputStream inputFromSocket;
@@ -203,7 +283,7 @@ class SocketHandler implements Runnable {
     }
 
     @Override
-    public void run() {
+     public void run() {
         try {
             String command = (String) inputFromSocket.readObject();
             if (command.equals("get user")) {
@@ -213,11 +293,7 @@ class SocketHandler implements Runnable {
                 case "login": {
                     String usernameEntered = ((String) inputFromSocket.readObject());
                     String passwordEntered = ((String) inputFromSocket.readObject());
-                    File usersFile = new File("data/users.ser");
-                    System.out.println(usersFile.exists());
-                    FileInputStream fileInputStream = new FileInputStream(usersFile);
-                    ObjectInputStream userFileInput = new ObjectInputStream(fileInputStream);
-                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
                     Iterator<UserFirstInfo> userFirstInfoIterator = users.iterator();
                     boolean isLoginCorrect = false;
                     while (userFirstInfoIterator.hasNext()) {
@@ -232,8 +308,6 @@ class SocketHandler implements Runnable {
                     if (!isLoginCorrect)
                         outputToSocket.writeBoolean(false);
                     outputToSocket.flush();
-                    userFileInput.close();
-                    fileInputStream.close();
                     break;
                 }
                 case "write user": {
@@ -241,7 +315,6 @@ class SocketHandler implements Runnable {
                     User newUserFile = ((User) inputFromSocket.readObject());
                     File userFile = new File("data/Users/" + oldUsername + "/" + "users.ser");
                     File userFolder = new File("data/Users/" + oldUsername);
-                    File allUserFile = new File("data/users.ser");
                     try {
                         //changing user file to the new one
                         FileOutputStream usersFileOutputStream = new FileOutputStream(userFile);
@@ -250,9 +323,7 @@ class SocketHandler implements Runnable {
                         usersOutputStream.close();
                         usersFileOutputStream.close();
                         //changing the allUserFile
-                        FileInputStream allUserFileInputStream = new FileInputStream(allUserFile);
-                        ObjectInputStream userInput = new ObjectInputStream(allUserFileInputStream);
-                        ArrayList<UserFirstInfo> usersArrayList = (ArrayList<UserFirstInfo>) (userInput.readObject());
+                        ArrayList<UserFirstInfo> usersArrayList = FileHandler.getUsersFile();
                         Iterator<UserFirstInfo> userFirstInfoIterator = usersArrayList.iterator();
                         while (userFirstInfoIterator.hasNext()) {
                             UserFirstInfo thisUserFirstInfo = userFirstInfoIterator.next();
@@ -264,13 +335,7 @@ class SocketHandler implements Runnable {
                                 break;
                             }
                         }
-                        allUserFileInputStream.close();
-                        userInput.close();
-                        FileOutputStream fileOutputStream =new FileOutputStream(allUserFile);
-                        ObjectOutputStream allUserFileOutputStream = new ObjectOutputStream(fileOutputStream);
-                        allUserFileOutputStream.writeObject(usersArrayList);
-                        allUserFileOutputStream.close();
-                        fileOutputStream.close();
+                        FileHandler.writeUsersFile(usersArrayList);
 
                     } catch (IOException e) {
                         System.out.println("Problem while writing user");
@@ -305,13 +370,7 @@ class SocketHandler implements Runnable {
                     break;
                 }
                 case "get users": {
-                    File usersFile = new File("data/users.ser");
-/*                    if (!usersFile.exists()) {
-                        usersFile.createNewFile();
-                    }*/
-                    FileInputStream userFileInputStream = new FileInputStream(usersFile);
-                    ObjectInputStream userInput = new ObjectInputStream(userFileInputStream);
-                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userInput.readObject());
+                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
                     HashSet<String> usernames = new HashSet<>();
                     Iterator<UserFirstInfo> userIterator = users.iterator();
                     while (userIterator.hasNext()) {
@@ -320,8 +379,6 @@ class SocketHandler implements Runnable {
                     outputToSocket.writeObject(usernames);
                     outputToSocket.close();
                     inputFromSocket.close();
-                    userFileInputStream.close();
-                    userInput.close();
                     break;
                 }
                 case "sign_up": {
@@ -349,21 +406,12 @@ class SocketHandler implements Runnable {
                         System.out.println("Problem while serializing the user data");
                         e.printStackTrace();
                     }
-                    File usersFile = new File("data/users.ser");
-                    if (!usersFile.exists()) {
+/*                    if (!usersFile.exists()) {
                         usersFile.createNewFile();
-                    }
-                    FileInputStream userFileInputStream = new FileInputStream(usersFile);
-                    ObjectInputStream userFileInput = new ObjectInputStream(userFileInputStream);
-                    ArrayList<UserFirstInfo> users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+                    }*/
+                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
                     users.add(newUserFirstInfo);
-                    userFileInput.close();
-                    userFileInputStream.close();
-                    FileOutputStream fileOutputStream = new FileOutputStream(usersFile);
-                    ObjectOutputStream userFileOutput = new ObjectOutputStream(fileOutputStream);
-                    userFileOutput.writeObject(users);
-                    userFileOutput.close();
-                    fileOutputStream.close();
+                    FileHandler.writeUsersFile(users);
                     outputToSocket.writeBoolean(true);
                     outputToSocket.flush();
                     //userFileInputStream.close();

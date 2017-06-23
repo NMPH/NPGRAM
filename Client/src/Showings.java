@@ -3,6 +3,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ public class Showings  {
             });
             Pane root=loader.load(classObject.getClass().getResource("Profile.fxml").openStream());
             ProfileController profileController=(ProfileController) loader.getController();
-            Scene profileScene = new Scene(root,650,400);
+            Scene profileScene = new Scene(root,650,900);
             profileScene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
             profileStage.setScene(profileScene);
             profileStage.show();
@@ -33,7 +34,7 @@ public class Showings  {
             Stage primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setControllerFactory(c -> {
-                return new EditProfileController(username);
+                return new EditProfileController(username,primaryStage);
             });
             Pane root = loader.load(classObject.getClass().getResource("EditProfile.fxml").openStream());
             EditProfileController editProfileController = (EditProfileController) loader.getController();
@@ -48,9 +49,9 @@ public class Showings  {
 
     }
     public static Stage showSearch(Object classObject,String myUsername){
-        Stage primaryStage= null;
+        Stage primaryStage=null;
         try{
-            primaryStage=new Stage();
+             primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
                 return new SearchController(myUsername);
