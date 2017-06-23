@@ -63,23 +63,4 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </top>
-   <bottom>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Label" />
-            <Region HBox.hgrow="ALWAYS" />
-            <Label layoutX="10.0" layoutY="10.0" text="Label">
-               <HBox.margin>
-                  <Insets left="255.0" />
-               </HBox.margin>
-            </Label>
-            <Region HBox.hgrow="ALWAYS" />
-            <Label layoutX="38.0" layoutY="10.0" text="Label">
-               <HBox.margin>
-                  <Insets left="260.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-      </HBox>
-   </bottom>
 </BorderPane>

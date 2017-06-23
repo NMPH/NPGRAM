@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 
 import java.io.BufferedInputStream;
@@ -27,6 +28,7 @@ public class PeopleProfileController implements Initializable{
     StackPane postsPane;
     User userPeople;
     User myUser;
+    final Circle clip = new Circle(75, 45, 45);
     @FXML
     ImageView profilePicture;
     @FXML
@@ -99,6 +101,7 @@ public class PeopleProfileController implements Initializable{
         }
         if(profileImage!=null) {
             profilePicture.setImage(profileImage);
+            profilePicture.setClip(clip);
         }
         this.bioLabel.setText(userPeople.bio);
         followersLabel.setText(new Integer(userPeople.followersUsernames.size()).toString());

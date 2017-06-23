@@ -37,7 +37,7 @@ public class HomeCell extends ListCell<Post> {
     Text dateCreated = new Text();
     Text likeCount = new Text();
     ImageView imageView = new ImageView();
-     Post lastItem;
+    Post lastItem;
     User myUser;
     public HomeCell(User myUser) {
         super();

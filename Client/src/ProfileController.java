@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -37,6 +38,7 @@ public class ProfileController implements Initializable {
         user= Gettings.getUser(username);
     }
     User user;
+    final Circle clip = new Circle(75, 45, 45);
     @FXML
     Label addPostLabel;
     @FXML
@@ -228,6 +230,7 @@ public class ProfileController implements Initializable {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
                 Image image = new Image(imageInputStream);
                 profilePicture.setImage(image);
+                profilePicture.setClip(clip);
                 user.setProfilePicture(file);
                Gettings.writeUser(username,user);
             } catch (IOException e) {
@@ -252,6 +255,7 @@ public class ProfileController implements Initializable {
         }
         if(profileImage!=null) {
             profilePicture.setImage(profileImage);
+            profilePicture.setClip(clip);
         }
         bioLabel.setText(user.bio);
 

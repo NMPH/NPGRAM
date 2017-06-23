@@ -33,7 +33,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="110.0" onMousePressed="#setProfilePicture" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="150.0" onMousePressed="#setProfilePicture" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -95,7 +95,7 @@
                         </HBox>
                         <Button fx:id="editProfileButton" mnemonicParsing="false" onAction="#editProfilePageOpener" prefHeight="22.0" prefWidth="125.0" text="edit profile">
                            <VBox.margin>
-                              <Insets bottom="25.0" left="90.0" />
+                              <Insets bottom="25.0" left="75.0" />
                            </VBox.margin>
                         </Button>
                         <Hyperlink fx:id="pendingFollowRequests" onAction="#PendingFollowRequestsPageOpener" text="Pending Follow Requests">
@@ -132,9 +132,10 @@
                   <Font size="16.0" />
                </font>
             </Label>
+            <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="addPostLabel" layoutX="10.0" layoutY="10.0" onMouseClicked="#addPost" prefHeight="17.0" prefWidth="59.0" text="Add">
                <HBox.margin>
-                  <Insets left="110.0" />
+                  <Insets />
                </HBox.margin>
                <font>
                   <Font size="16.0" />
@@ -143,15 +144,19 @@
                   <Insets left="15.0" />
                </padding>
             </Label>
+<<<<<<< HEAD
             <Region prefHeight="0.0" prefWidth="94.0" />
             <Label fx:id="directLabel" onMouseClicked="#showChooseChats" text="Direct">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
+=======
+            <Region HBox.hgrow="ALWAYS" />
+>>>>>>> refs/remotes/origin/starting_branch
             <Label fx:id="searchLabel" layoutX="38.0" layoutY="10.0" onMouseClicked="#search" text="Search">
                <HBox.margin>
-                  <Insets left="120.0" />
+                  <Insets />
                </HBox.margin>
                <font>
                   <Font size="16.0" />

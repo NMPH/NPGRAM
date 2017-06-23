@@ -4,13 +4,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PostMakeController">
+<StackPane fx:id="bp" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PostMakeController">
    <children>
-      <Button fx:id="selectImageButton" layoutX="244.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectImage" text="Select Image" />
-      <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="190.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" />
-      <TextField fx:id="captionTextField" alignment="CENTER" layoutX="205.0" layoutY="286.0" promptText="Caption" />
-      <Button fx:id="submitPost" layoutX="243.0" layoutY="343.0" mnemonicParsing="false" onAction="#submitPost" text="Submit Post" />
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="selectImageButton" layoutX="249.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectImage" text="Select Image" />
+            <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="190.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="captionTextField" alignment="CENTER" layoutX="216.0" layoutY="285.0" promptText="Caption" />
+            <Button fx:id="submitPost" layoutX="250.0" layoutY="343.0" mnemonicParsing="false" onAction="#submitPost" text="Submit Post" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>
