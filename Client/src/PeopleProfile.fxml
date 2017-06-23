@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ProfileController">
     <top>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
@@ -31,7 +31,7 @@
                 </HBox>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
                                 <Insets />
                             </HBox.margin>
@@ -91,7 +91,10 @@
                                         <Insets bottom="25.0" />
                                     </VBox.margin>
                                 </HBox>
-                        <Button fx:id="unFollowButton" mnemonicParsing="false" onAction="#unFollowButtonClicked" text="Unfollow" />
+                        <Button fx:id="unFollowButton" mnemonicParsing="false" onAction="#unFollowButtonClicked" text="Unfollow">
+                           <VBox.margin>
+                              <Insets left="50.0" />
+                           </VBox.margin></Button>
                                 <Button fx:id="editProfileButton" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Block">
                                     <VBox.margin>
                                         <Insets bottom="-25.0" left="160.0" />
