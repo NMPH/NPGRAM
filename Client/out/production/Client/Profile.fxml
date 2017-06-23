@@ -62,7 +62,7 @@
                               </VBox>
                               <VBox prefHeight="91.0" prefWidth="96.0">
                                  <children>
-                                    <Label fx:id="followersLabel" text="0">
+                                    <Label fx:id="followersLabel" onMouseClicked="#showFollowers" text="0">
                                        <VBox.margin>
                                           <Insets left="45.0" />
                                        </VBox.margin>
@@ -76,7 +76,7 @@
                               </VBox>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label fx:id="followingsLabel" text="0">
+                                    <Label fx:id="followingsLabel" onMouseClicked="#showFollowings" text="0">
                                        <VBox.margin>
                                           <Insets left="45.0" />
                                        </VBox.margin>

@@ -45,7 +45,7 @@ public class PeopleProfileController implements Initializable{
         lv.setCellFactory(new Callback<ListView<Post>, ListCell<Post>>() {
             @Override
             public ListCell<Post> call(ListView<Post> param) {
-                return new HomeCell(userPeople);
+                return new HomeCell(myUser);
             }
         });
         postsPane.getChildren().add(lv);
@@ -69,6 +69,7 @@ public class PeopleProfileController implements Initializable{
         userPeople.followRequestsRecieved.remove(myUser.userFirstInfo.username);
         Gettings.writeUser(userPeople.userFirstInfo.username,userPeople);
         Gettings.writeUser(myUser.userFirstInfo.username,myUser);
+        followersLabel.setText((new Integer(userPeople.followersUsernames.size()).toString()));
         unFollowButton.setVisible(false);
         followButton.setVisible(true);
     }

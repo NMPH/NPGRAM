@@ -22,8 +22,13 @@ public class FollowRequestCell extends ListCell<String> {
     Button reject = new Button("Reject");
     String lastItem;
     User myUser;
-    public FollowRequestCell(User myUser) {
+    ProfileController profileController;
+    public FollowRequestCell(User myUser,ProfileController profileController) {
+        /*
+        profileController is sent in order to change the followingsLabel when user accepts the request
+         */
         super();
+        this.profileController=profileController;
         this.myUser=myUser;
         hbox.getChildren().addAll(label, pane, accept,reject);
         HBox.setHgrow(pane, Priority.ALWAYS);
@@ -42,6 +47,7 @@ public class FollowRequestCell extends ListCell<String> {
                 Gettings.writeUser(myUser.userFirstInfo.username,myUser);
                 Gettings.writeUser(toFollow.userFirstInfo.username,toFollow);
                 hbox.setVisible(false);
+                profileController.followersLabel.setText(new Integer(myUser.followersUsernames.size()).toString());
             }
         });
         reject.setOnAction(new EventHandler<ActionEvent>() {

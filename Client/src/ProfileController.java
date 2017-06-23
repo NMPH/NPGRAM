@@ -53,9 +53,49 @@ public class ProfileController implements Initializable {
     Label searchLabel,postLabel,followersLabel,followingsLabel, homeLabel;
     @FXML
     StackPane postsPane;
+    public void showFollowers(){
+        Stage primaryStage = new Stage();
+        StackPane pane = new StackPane();
+        Scene scene = new Scene(pane, 300, 150);
+        primaryStage.setScene(scene);
+        ObservableList<String > list = FXCollections.observableArrayList();
+        Iterator<String> followersUsernames = Gettings.getUser(username).followersUsernames.iterator();
+        while (followersUsernames.hasNext()){
+            list.add(followersUsernames.next());
+        }
+        ListView<String> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new UsersCell(user);
+            }
+        });
+        pane.getChildren().add(lv);
+        primaryStage.show();
+    }
+    public void showFollowings(){
+        Stage primaryStage = new Stage();
+        StackPane pane = new StackPane();
+        Scene scene = new Scene(pane, 300, 150);
+        primaryStage.setScene(scene);
+        ObservableList<String > list = FXCollections.observableArrayList();
+        Iterator<String> followingsIterator = Gettings.getUser(username).followingsUsernames.iterator();
+        while (followingsIterator.hasNext()){
+            list.add(followingsIterator.next());
+        }
+        ListView<String> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new UsersCell(user);
+            }
+        });
+        pane.getChildren().add(lv);
+        primaryStage.show();
+    }
     public void showMyPosts(){
         ObservableList<Post> list = FXCollections.observableArrayList();
-        Iterator<Post> postIterator = Gettings.getUser(username).posts.descendingIterator();
+        Iterator<Post> postIterator = Gettings.getUser(username).posts.iterator();
         while (postIterator.hasNext()){
             list.add(postIterator.next());
         }
@@ -76,7 +116,7 @@ public class ProfileController implements Initializable {
         ObservableList<Post> list = FXCollections.observableArrayList();
         Iterator<String > followingsUsernames= user.followingsUsernames.iterator();
         while(followingsUsernames.hasNext()){
-            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.descendingIterator();
+            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.iterator();
             while (postIterator.hasNext()){
                 list.add(postIterator.next());
                 //we've got works here!
@@ -122,10 +162,11 @@ public class ProfileController implements Initializable {
             list.add(followReqs.next());
         }
         ListView<String> lv = new ListView<>(list);
+        ProfileController thisProfileController = this;
         lv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
             @Override
             public ListCell<String> call(ListView<String> param) {
-                return new FollowRequestCell(user);
+                return new FollowRequestCell(user,thisProfileController);
             }
         });
         pane.getChildren().add(lv);

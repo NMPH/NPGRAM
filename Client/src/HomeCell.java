@@ -66,6 +66,7 @@ public class HomeCell extends ListCell<Post> {
                     }*/
                   if(postUser.removePostByHashCode(lastItem.hashCode())){
                       System.out.println("YEPPIE!!");
+                      commentTextField.setText("");
                       postUser.posts.add(newPost);
                       //write user
                       Gettings.writeUser(postUser.userFirstInfo.username,postUser);

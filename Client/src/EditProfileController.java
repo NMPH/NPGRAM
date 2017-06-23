@@ -61,6 +61,12 @@ public class EditProfileController implements Initializable{
         user.userFirstInfo.username=username;
         user.userFirstInfo.fullName=name;
         Gettings.writeUser(oldUsername,user);
+        try {
+            Thread.sleep(10);
+        }catch (InterruptedException e){
+            System.out.println("in done label interrupted exception");
+            e.printStackTrace();
+        }
         Showings.showProfile(this,username);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
