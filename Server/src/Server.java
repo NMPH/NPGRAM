@@ -1,6 +1,7 @@
 
 import javafx.scene.image.Image;
 import sun.misc.JavaObjectInputStreamAccess;
+import sun.util.resources.cldr.ebu.CalendarData_ebu_KE;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -26,20 +27,30 @@ class User implements Serializable {
     boolean isPrivate;
     String bio;
     File profilePicture;
-    ArrayList<Post> posts;
+    TreeSet<Post> posts;
     UserFirstInfo userFirstInfo;
 
     User(UserFirstInfo userFirstInfo) {
         this.userFirstInfo = userFirstInfo;
         isPrivate = false;
-        posts = new ArrayList<Post>();
+        posts = new TreeSet<Post>();
         followersUsernames = new HashSet<String>();
         followingsUsernames = new HashSet<String>();
         followRequestsSent = new HashSet<String>();
         followRequestsRecieved = new HashSet<String>();
 
     }
-
+    public boolean removePostByHashCode(int hashcode){
+        Iterator<Post> postIterator= posts.iterator();
+        while(postIterator.hasNext()){
+            Post post = postIterator.next();
+            if(post.hashCode()==hashcode) {
+                posts.remove(post);
+                return true;
+            }
+        }
+        return false;
+    }
     public boolean isFollowedBy(String username) {
         if (followersUsernames.contains(username))
             return true;
@@ -66,20 +77,80 @@ class User implements Serializable {
     }
 }
 
-class Post implements Serializable {
+class Post implements Serializable ,Comparable<Post>{
+    @Override
+    public int compareTo(Post post) {
+        int ret= -date.compareTo(post.date);
+        return ret;
+    }
+
+    class PostDate implements Serializable,Comparable<PostDate>{
+        int year;
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int seconds;
+        PostDate(){
+            Date date =new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH);
+            day = cal.get(Calendar.DAY_OF_MONTH);
+            hour=cal.get(Calendar.HOUR_OF_DAY);
+            minute=cal.get(Calendar.MINUTE);
+            seconds= cal.get(Calendar.SECOND);
+        }
+        @Override
+        public int hashCode(){
+            return year*month*day;
+        }
+        @Override
+        public String toString(){
+            return year+"/"+month+"/"+day +" on:"+ hour +": "+minute;
+        }
+
+        @Override
+        public int compareTo(PostDate postDate) {
+            if(year!=postDate.year)
+                return year-postDate.year;
+            if(month!=postDate.month)
+                return month-postDate.month;
+            if(day!=postDate.day)
+                return day-postDate.day;
+            if(hour!=postDate.hour)
+                return hour-postDate.hour;
+            if(day!=postDate.day)
+                return day-postDate.day;
+            return seconds-postDate.seconds;
+        }
+    }
     ArrayList<String> likes;
     ArrayList<NPComment> comments;
     String caption;
     File image;
     String ownerUsername;
-
+    PostDate date;
     Post(File image, String caption,String ownerUsername) {
         this.ownerUsername=ownerUsername;
         this.image = image;
         this.caption=caption;
         comments = new ArrayList<NPComment>();
         likes= new ArrayList<String >();
-
+        date = new PostDate();
+    }
+    Post(Post post){
+        this.ownerUsername = post.ownerUsername;
+        this.image=post.image;
+        this.caption=post.caption;
+        this.comments=post.comments;
+        this.likes=post.likes;
+        this.date=post.date;
+    }
+    @Override
+    public int hashCode(){
+        return caption.length()*3+(int)image.length()+ownerUsername.length()+date.hashCode();
     }
 }
 

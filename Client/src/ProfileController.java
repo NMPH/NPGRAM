@@ -55,7 +55,7 @@ public class ProfileController implements Initializable {
     StackPane postsPane;
     public void showMyPosts(){
         ObservableList<Post> list = FXCollections.observableArrayList();
-        Iterator<Post> postIterator = Gettings.getUser(username).posts.iterator();
+        Iterator<Post> postIterator = Gettings.getUser(username).posts.descendingIterator();
         while (postIterator.hasNext()){
             list.add(postIterator.next());
         }
@@ -76,7 +76,7 @@ public class ProfileController implements Initializable {
         ObservableList<Post> list = FXCollections.observableArrayList();
         Iterator<String > followingsUsernames= user.followingsUsernames.iterator();
         while(followingsUsernames.hasNext()){
-            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.iterator();
+            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.descendingIterator();
             while (postIterator.hasNext()){
                 list.add(postIterator.next());
                 //we've got works here!
@@ -160,8 +160,7 @@ public class ProfileController implements Initializable {
     public void setProfilePicture(Event event){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select A Photo : ");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
         );
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);

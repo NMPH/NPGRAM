@@ -46,9 +46,8 @@ public class PostMakeController {
     public void selectImage(Event event){
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select A Photo : ");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                    new FileChooser.ExtensionFilter("PNG", "*.png")
-            );
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
+        );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             imageFile = fileChooser.showOpenDialog(stage);
             if(imageFile!=null) {

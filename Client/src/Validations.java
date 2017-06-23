@@ -9,6 +9,11 @@ import java.util.Iterator;
  * Created by noyz on 6/18/17.
  */
 public class Validations {
+    public static boolean isValidComment(String commentText){
+        if(commentText.trim().isEmpty())
+            return false;
+        return true;
+    }
     public static boolean isValidUserName(String userName) {
             HashSet<String> usernames =Gettings.getUsers();
             Iterator<String> usernameIterator = usernames.iterator();
