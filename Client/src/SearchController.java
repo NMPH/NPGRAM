@@ -34,7 +34,7 @@ public class SearchController implements Initializable{
     TextField usernameToSearchTextField;
     public void searchButtonAction(ActionEvent event){
         String usernameToSearch = usernameToSearchTextField.getText();
-        if(Gettings.userExists(usernameToSearch)){
+        if((Gettings.userExists(usernameToSearch))&&(!Gettings.getUser(myUsername).isBlockedBy(usernameToSearch))){
             Stage peopleProfileStage= Showings.showPeopleProfile(this,usernameToSearch, myUsername);
             peopleProfileStage.setOnHiding(new EventHandler<WindowEvent>() {
 
@@ -49,6 +49,7 @@ public class SearchController implements Initializable{
                     });
                 }
             });
+            userNotFoundLabel.setText("");
         }else{
             userNotFoundLabel.setText("username not found..");
         }

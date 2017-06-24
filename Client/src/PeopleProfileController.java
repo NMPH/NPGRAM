@@ -2,6 +2,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,6 +40,26 @@ public class PeopleProfileController implements Initializable{
     Button followButton,unFollowButton;
     @FXML
     Label followersLabel,followingsLabel;
+    @FXML
+    Button blockButton;
+    @FXML
+    Button unblockButton;
+    public void block(ActionEvent event){
+        myUser.blockedUsernames.add(userPeople.userFirstInfo.username);
+        userPeople.blockedByUsernames.add(myUser.userFirstInfo.username);
+        Gettings.writeUser(userPeople.userFirstInfo.username,userPeople);
+        Gettings.writeUser(myUser.userFirstInfo.username,myUser);
+        blockButton.setVisible(false);
+        unblockButton.setVisible(true);
+    }
+    public void unblock(Event event){
+        myUser.blockedUsernames.remove(userPeople.userFirstInfo.username);
+        userPeople.blockedByUsernames.remove(myUser.userFirstInfo.username);
+        Gettings.writeUser(userPeople.userFirstInfo.username,userPeople);
+        Gettings.writeUser(myUser.userFirstInfo.username,myUser);
+        blockButton.setVisible(true);
+        unblockButton.setVisible(false);
+    }
     public void showPeoplePosts(){
         ObservableList<Post> list = FXCollections.observableArrayList();
         Iterator<Post> postIterator = Gettings.getUser(userPeople.userFirstInfo.username).posts.iterator();
@@ -84,12 +105,20 @@ public class PeopleProfileController implements Initializable{
             postsPane.setVisible(true);
             showPeoplePosts();
         }
+        blockButton.setVisible(false);
+        unblockButton.setVisible(false);
         followButton.setVisible(false);
         unFollowButton.setVisible(false);
         if((myUser.isFollowRequestSent(userPeople.userFirstInfo.username))||(myUser.isFollowing(userPeople.userFirstInfo.username))){
             unFollowButton.setVisible(true);
         }else{
             followButton.setVisible(true);
+        }
+        if(myUser.blockedUsernames.contains(userPeople.userFirstInfo.username)){
+            unblockButton.setVisible(true);
+        }
+        else if((!myUser.isFollowing(userPeople.userFirstInfo.username))&&(!myUser.isFollowRequestSent(userPeople.userFirstInfo.username))){
+            blockButton.setVisible(true);
         }
         BufferedImage profileImage=null;
         if (userPeople.profilePicture != null) {

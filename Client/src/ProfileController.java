@@ -43,6 +43,8 @@ public class ProfileController implements Initializable {
     User user;
     final Circle clip = new Circle(75, 45, 45);
     @FXML
+    ImageView refresh;
+    @FXML
     Label addPostLabel;
     @FXML
     Hyperlink pendingFollowRequests;
@@ -58,6 +60,11 @@ public class ProfileController implements Initializable {
     Label searchLabel,postLabel,followersLabel,followingsLabel, homeLabel;
     @FXML
     StackPane postsPane;
+    public void refresh(Event event){
+        user = Gettings.getUser(username);
+        initWorks();
+        System.out.println("hereee!");
+    }
     public void showChooseChats(Event event) {
         try {
             Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -246,13 +253,16 @@ public class ProfileController implements Initializable {
         }
         System.out.println(file);
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initWorks(){
+        Image c =SwingFXUtils.toFXImage(ImageFunctions.ByteArrayToBufferedImage(Gettings.getRefreshIcon()),null);
+        refresh.setImage(c);
         showMyPosts();
         BufferedImage profileImage=null;
-            if (user.profilePicture != null) {
-                profileImage =  ImageFunctions.ByteArrayToBufferedImage(user.profilePicture);;
-            }
+        if (user.profilePicture != null) {
+            profileImage =  ImageFunctions.ByteArrayToBufferedImage(user.profilePicture);;
+        }else{
+            profileImage = ImageFunctions.ByteArrayToBufferedImage(Gettings.getInitImage());
+        }
         if(profileImage!=null) {
             Image card = SwingFXUtils.toFXImage(profileImage, null );
             profilePicture.setImage(card);
@@ -264,5 +274,9 @@ public class ProfileController implements Initializable {
         followingsLabel.setText(new Integer(user.followingsUsernames.size()).toString());
         postLabel.setText(new Integer(user.posts.size()).toString());
         UsernameTitle.setText(user.userFirstInfo.username);
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initWorks();
     }
 }

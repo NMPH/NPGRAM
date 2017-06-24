@@ -3,6 +3,7 @@
  */
 
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -135,7 +137,12 @@ public class HomeCell extends ListCell<Post> {
             comments.setText(comments.getText().toString()+"\n"+npComment.username+ " said : "+ npComment.text);
         }
         if(lastItem.image!=null) {
-            try {
+            BufferedImage profileImage =  ImageFunctions.ByteArrayToBufferedImage(lastItem.image);
+            Image card = SwingFXUtils.toFXImage(profileImage, null );
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
+            imageView.setImage(card);
+            /*try {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(lastItem.image));
                 Image image = new Image(imageInputStream);
                 imageView.setImage(image);
@@ -144,7 +151,7 @@ public class HomeCell extends ListCell<Post> {
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
                 e.printStackTrace();
-            }
+            }*/
         }
         System.out.println(lastItem.image);
     }

@@ -24,6 +24,8 @@ class User implements Serializable {
     HashSet<String> followersUsernames;
     HashSet<String> followRequestsSent;
     HashSet<String> followRequestsRecieved;
+    HashSet<String> blockedUsernames;
+    HashSet<String> blockedByUsernames;
     boolean isPrivate;
     String bio;
     byte[] profilePicture;
@@ -38,6 +40,8 @@ class User implements Serializable {
         followingsUsernames = new HashSet<String>();
         followRequestsSent = new HashSet<String>();
         followRequestsRecieved = new HashSet<String>();
+        blockedUsernames = new HashSet<String >();
+        blockedByUsernames = new HashSet<String >();
         chats = new HashSet<Chat>();
 
     }
@@ -63,6 +67,11 @@ class User implements Serializable {
                 return true;
             }
         }
+        return false;
+    }
+    public boolean isBlockedBy(String username) {
+        if (blockedByUsernames.contains(username))
+            return true;
         return false;
     }
     public boolean isFollowedBy(String username) {
@@ -176,10 +185,10 @@ class Post implements Serializable ,Comparable<Post>{
     ArrayList<String> likes;
     ArrayList<NPComment> comments;
     String caption;
-    File image;
+    byte[] image;
     String ownerUsername;
     PostDate date;
-    Post(File image, String caption,String ownerUsername) {
+    Post(byte[] image, String caption,String ownerUsername) {
         this.ownerUsername=ownerUsername;
         this.image = image;
         this.caption=caption;
@@ -197,7 +206,7 @@ class Post implements Serializable ,Comparable<Post>{
     }
     @Override
     public int hashCode(){
-        return caption.length()*3+(int)image.length()+ownerUsername.length()+date.hashCode();
+        return caption.length()*3+(int)image.length+ownerUsername.length()+date.hashCode();
     }
 }
 
@@ -238,6 +247,42 @@ class SocketAndStreams {
     }
 }
 class FileHandler{
+    synchronized public static ArrayList<Byte> getDefaultProfilePicture(){
+        ArrayList<Byte> byteArrayList = new ArrayList<Byte>();
+        File iconFile = new File("data/InitData/initImage.jpg");
+        try {
+            FileInputStream fileInputStream = new FileInputStream(iconFile);
+            int i;
+            while((i=fileInputStream.read())!=-1){
+                byteArrayList.add((byte)i);
+            }
+            fileInputStream.close();
+            return byteArrayList;
+        }catch (IOException e){
+            System.out.println("refresh profileImage Sending PROBLEM");
+            e.printStackTrace();
+        }
+        return byteArrayList;
+
+    }
+    synchronized public static ArrayList<Byte> getRefreshIcon(){
+        ArrayList<Byte> byteArrayList = new ArrayList<Byte>();
+        File iconFile = new File("data/InitData/Refresh_icon.png");
+        try {
+            FileInputStream fileInputStream = new FileInputStream(iconFile);
+            int i;
+            while((i=fileInputStream.read())!=-1){
+                byteArrayList.add((byte)i);
+            }
+            fileInputStream.close();
+            return byteArrayList;
+        }catch (IOException e){
+            System.out.println("refresh ICON PROBLEM");
+            e.printStackTrace();
+        }
+        return byteArrayList;
+
+    }
     synchronized public static  ArrayList<UserFirstInfo> getUsersFile(){
         ArrayList<UserFirstInfo> users=null;
         try {
@@ -290,6 +335,14 @@ class SocketHandler implements Runnable {
                 command = command;
             }
             switch (command) {
+                case "get_init_image":{
+                    outputToSocket.writeObject(FileHandler.getDefaultProfilePicture());
+                    break;
+                }
+                case "get_refresh_icon":{
+                    outputToSocket.writeObject(FileHandler.getRefreshIcon());
+                    break;
+                }
                 case "login": {
                     String usernameEntered = ((String) inputFromSocket.readObject());
                     String passwordEntered = ((String) inputFromSocket.readObject());

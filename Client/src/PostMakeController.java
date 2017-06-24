@@ -1,3 +1,4 @@
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,7 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +24,7 @@ import java.io.IOException;
 public class PostMakeController {
     User myUser;
     String myUsername;
-    File imageFile;
+    byte[] imageFile;
     String caption;
     @FXML
     Button selectImageButton;
@@ -44,7 +47,21 @@ public class PostMakeController {
         stage.close();
     }
     public void selectImage(Event event){
-            FileChooser fileChooser = new FileChooser();
+        File file =Gettings.getFileChooserImage((Stage) ((Node) event.getSource()).getScene().getWindow());
+        if(file!=null) {
+            try {
+                String fileName = file.getName();
+                String fileExtension = fileName.substring(fileName.indexOf(".") + 1, file.getName().length());
+                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
+                BufferedImage image = ImageIO.read(imageInputStream);
+                imageFile= ImageFunctions.bufferedImageToByteArray(image,fileExtension);
+                imageView.setImage(SwingFXUtils.toFXImage(image, null ));
+            } catch (IOException e) {
+                System.out.println("ERROR while reading from image");
+                e.printStackTrace();
+            }
+        }
+   /*         FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select A Photo : ");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
         );
@@ -61,7 +78,7 @@ public class PostMakeController {
                     e.printStackTrace();
                 }
             }
-            System.out.println(imageFile);
+            System.out.println(imageFile);*/
     }
     public PostMakeController(String myUsername){
         this.myUsername = myUsername;
