@@ -16,6 +16,28 @@ import java.util.Iterator;
  * Created by noyz on 6/21/17.
  */
 public class Gettings {
+    public static byte[] getHomeIcon(){
+        byte[] image=null;
+        try {
+            Socket server = new Socket("127.0.0.1", 1234);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(server.getOutputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
+            objectOutputStream.writeObject("get_home_icon");
+            objectOutputStream.flush();
+            ArrayList<Byte> byteArrayList = ((ArrayList<Byte>) objectInputStream.readObject());
+            image = new byte[byteArrayList.size()];
+            for (int i = 0; i <image.length ; i++) {
+                image[i]=byteArrayList.get(i);
+            }
+            return image;
+        } catch (IOException e) {
+            System.out.println("problem in userExists func");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("wtf class not found??!!! userExists func");
+        }
+        return image;
+    }
     public static byte[] getRefreshIcon(){
         byte[] image=null;
         try {

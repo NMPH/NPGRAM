@@ -247,9 +247,9 @@ class SocketAndStreams {
     }
 }
 class FileHandler{
-    synchronized public static ArrayList<Byte> getDefaultProfilePicture(){
+    synchronized public static ArrayList<Byte> getIcon(String path){
         ArrayList<Byte> byteArrayList = new ArrayList<Byte>();
-        File iconFile = new File("data/InitData/initImage.jpg");
+        File iconFile = new File(path);
         try {
             FileInputStream fileInputStream = new FileInputStream(iconFile);
             int i;
@@ -259,25 +259,7 @@ class FileHandler{
             fileInputStream.close();
             return byteArrayList;
         }catch (IOException e){
-            System.out.println("refresh profileImage Sending PROBLEM");
-            e.printStackTrace();
-        }
-        return byteArrayList;
-
-    }
-    synchronized public static ArrayList<Byte> getRefreshIcon(){
-        ArrayList<Byte> byteArrayList = new ArrayList<Byte>();
-        File iconFile = new File("data/InitData/Refresh_icon.png");
-        try {
-            FileInputStream fileInputStream = new FileInputStream(iconFile);
-            int i;
-            while((i=fileInputStream.read())!=-1){
-                byteArrayList.add((byte)i);
-            }
-            fileInputStream.close();
-            return byteArrayList;
-        }catch (IOException e){
-            System.out.println("refresh ICON PROBLEM");
+            System.out.println("icon profileImage Sending PROBLEM");
             e.printStackTrace();
         }
         return byteArrayList;
@@ -335,12 +317,16 @@ class SocketHandler implements Runnable {
                 command = command;
             }
             switch (command) {
+                case "get_home_icon" :{
+                    outputToSocket.writeObject(FileHandler.getIcon("data/InitData/home-button.png"));
+                    break;
+                }
                 case "get_init_image":{
-                    outputToSocket.writeObject(FileHandler.getDefaultProfilePicture());
+                    outputToSocket.writeObject(FileHandler.getIcon("data/InitData/initImage.jpg"));
                     break;
                 }
                 case "get_refresh_icon":{
-                    outputToSocket.writeObject(FileHandler.getRefreshIcon());
+                    outputToSocket.writeObject(FileHandler.getIcon("data/InitData/Refresh_icon.png"));
                     break;
                 }
                 case "login": {

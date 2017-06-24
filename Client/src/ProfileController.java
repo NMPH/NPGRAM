@@ -139,9 +139,10 @@ public class ProfileController implements Initializable {
         postsPane.getChildren().add(lv);
     }
     public void openHome(Event event){
-        Stage primaryStage = new Stage();
+/*        Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        //Stage primaryStage = new Stage();
         StackPane pane = new StackPane();
-        Scene scene = new Scene(pane, 300, 150);
+        Scene scene = new Scene(pane, 650, 900);
         primaryStage.setScene(scene);
         ObservableList<Post> list = FXCollections.observableArrayList();
         Iterator<String > followingsUsernames= user.followingsUsernames.iterator();
@@ -160,7 +161,23 @@ public class ProfileController implements Initializable {
             }
         });
         pane.getChildren().add(lv);
-        primaryStage.show();
+        primaryStage.show();*/
+        try {
+            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new HomeController(username, primaryStage);
+            });
+            Parent root = loader.load(getClass().getResource("Home.fxml").openStream());
+            HomeController homeController = (HomeController) loader.getController();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("Problem in showChooseChats");
+            e.printStackTrace();
+        }
     }
     public void addPost(Event event){
         Stage addPostStage = Showings.showAddPost(this,username);
