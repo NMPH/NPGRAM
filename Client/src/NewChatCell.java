@@ -45,7 +45,6 @@ public class NewChatCell extends ListCell<String> {
                 Chat newChat = new Chat(myUser.userFirstInfo.username,lastItem);
                 myUser.chats.add(newChat);
                 toChatUser.chats.add(newChat);
-                toChatUser.chats.add(newChat);
                 Gettings.writeUser(toChatUser.userFirstInfo.username,toChatUser);
                 Gettings.writeUser(myUser.userFirstInfo.username,myUser);
                 //open chat xml file which contains chatCell

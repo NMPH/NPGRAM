@@ -1,69 +1,47 @@
 /**
  * Created by noyz on 6/23/17.
  */
+
 import javafx.scene.image.Image;
+
 import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
 public class ImageFunctions {
-
-    public static Image getJavaFXImage(byte[] rawPixels, int width, int height) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    public static byte[] bufferedImageToByteArray(
+            BufferedImage data) {
+        byte[] bytes=null;
         try {
-            ImageIO.write((RenderedImage) createBufferedImage(rawPixels, width, height), "png", out);
-            out.flush();
-        } catch (IOException ex) {
-            System.out.println("getJAVAFXIMAGEPROBLEM");
-            ex.printStackTrace();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(data, "jpg", baos);
+            bytes = baos.toByteArray();
+            return bytes;
+            //oos.writeObject(bytes);
+        } catch (IOException e) {
+            System.out.println("problem while converting image to byte array00");
+            e.printStackTrace();
         }
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        return new javafx.scene.image.Image(in);
+        return bytes;
     }
 
-    private static BufferedImage createBufferedImage(byte[] pixels, int width, int height) {
-        SampleModel sm = getIndexSampleModel(width, height);
-        DataBuffer db = new DataBufferByte(pixels, width*height, 0);
-        WritableRaster raster = Raster.createWritableRaster(sm, db, null);
-        IndexColorModel cm = getDefaultColorModel();
-        BufferedImage image = new BufferedImage(cm, raster, false, null);
+    public static BufferedImage ByteArrayToBufferedImage(
+            byte[] byteArray)  {
+        if(byteArray==null) return null;
+        BufferedImage image=null;
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(
+                    byteArray);
+             image = ImageIO.read(bais);
+            return image;
+        }catch (IOException e){
+            System.out.println("problem while converting byte array to buffered Image");
+            e.printStackTrace();
+        }
         return image;
     }
-
-    private static SampleModel getIndexSampleModel(int width, int height) {
-        IndexColorModel icm = getDefaultColorModel();
-        WritableRaster wr = icm.createCompatibleWritableRaster(1, 1);
-        SampleModel sampleModel = wr.getSampleModel();
-        sampleModel = sampleModel.createCompatibleSampleModel(width, height);
-        return sampleModel;
-    }
-
-    private static IndexColorModel getDefaultColorModel() {
-        byte[] r = new byte[256];
-        byte[] g = new byte[256];
-        byte[] b = new byte[256];
-        for(int i=0; i<256; i++) {
-            r[i]=(byte)i;
-            g[i]=(byte)i;
-            b[i]=(byte)i;
-        }
-        IndexColorModel defaultColorModel = new IndexColorModel(8, 256, r, g, b);
-        return defaultColorModel;
-    }
-
-/*    public void findMinAndMax(short[] pixels, int width, int height) {
-        int size = width*height;
-        int value;
-        min = 65535;
-        max = 0;
-        for (int i=0; i<size; i++) {
-            value = pixels[i]&0xffff;
-            if (value<min)
-                min = value;
-            if (value>max)
-                max = value;
-        }
-    }*/
 }

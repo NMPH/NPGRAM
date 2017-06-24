@@ -26,7 +26,7 @@ class User implements Serializable {
     HashSet<String> followRequestsRecieved;
     boolean isPrivate;
     String bio;
-    File profilePicture;
+    byte[] profilePicture;
     TreeSet<Post> posts;
     UserFirstInfo userFirstInfo;
     HashSet<Chat> chats;
@@ -86,7 +86,7 @@ class User implements Serializable {
         return false;
     }
 
-    public void setProfilePicture(File profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 }

@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -23,6 +24,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import sun.awt.shell.ShellFolder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -228,10 +231,11 @@ public class ProfileController implements Initializable {
         if(file!=null) {
             try {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
-                Image image = new Image(imageInputStream);
-                profilePicture.setImage(image);
+                BufferedImage image = ImageIO.read(imageInputStream);
+                byte[] imageBytes= ImageFunctions.bufferedImageToByteArray(image);
+                profilePicture.setImage(SwingFXUtils.toFXImage(image, null ));
                 profilePicture.setClip(clip);
-                user.setProfilePicture(file);
+                user.setProfilePicture(imageBytes);
                Gettings.writeUser(username,user);
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
@@ -243,18 +247,13 @@ public class ProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showMyPosts();
-        Image profileImage=null;
-        try {
+        BufferedImage profileImage=null;
             if (user.profilePicture != null) {
-                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
-                profileImage = new Image(imageInputStream);
+                profileImage =  ImageFunctions.ByteArrayToBufferedImage(user.profilePicture);;
             }
-        }catch (IOException e){
-            System.out.println("problem in reading the user profile picture in ProfileController()");
-            e.printStackTrace();
-        }
         if(profileImage!=null) {
-            profilePicture.setImage(profileImage);
+            Image card = SwingFXUtils.toFXImage(profileImage, null );
+            profilePicture.setImage(card);
             profilePicture.setClip(clip);
         }
         bioLabel.setText(user.bio);

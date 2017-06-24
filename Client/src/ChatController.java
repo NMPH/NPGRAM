@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -19,8 +22,7 @@ import sun.awt.windows.ThemeReader;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,31 +58,37 @@ public class ChatController implements Initializable {
     @FXML
     StackPane ChatPane;
     @FXML
-    TextField chatMessage;
+    TextField chatMessageTextField;
     @FXML
     Button sendMessage;
     @FXML
     ImageView imageView;
+    @FXML
+    Button addImageButton;
+    byte[] imageBytes;
+    final Circle clip = new Circle(75, 45, 45);
+    public void addImage(Event event){
+
+        File file =Gettings.getFileChooserImage((Stage) ((Node) event.getSource()).getScene().getWindow());
+        if(file!=null) {
+            try {
+                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
+                BufferedImage image = ImageIO.read(imageInputStream);
+                imageBytes= ImageFunctions.bufferedImageToByteArray(image);
+                imageView.setImage(SwingFXUtils.toFXImage(image, null ));
+            } catch (IOException e) {
+                System.out.println("ERROR while reading from image");
+                e.printStackTrace();
+            }
+        }
+        System.out.println(file);
+    }
     public void sendMessage(){
         myUser = Gettings.getUser(myUsername);
         yaruUser = Gettings.getUser(yaruUsername);
-        byte[] res=null;
-/*        if(imageView.getImage()!=null) {
-            try {
-                BufferedImage bImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
-                ByteArrayOutputStream s = new ByteArrayOutputStream();
-                ImageIO.write(bImage, "png", s);
-                res = s.toByteArray();
-                s.close();
-            } catch (IOException e) {
-                System.out.println("error while reading image in ChatController ");
-                e.printStackTrace();
-            }
-
-        }*/
         Chat oldChat=null;
-        String text = chatMessage.getText();
-        ChatMessage chatMessage= new ChatMessage(myUsername,text,res);
+        String text = chatMessageTextField.getText();
+        ChatMessage chatMessage= new ChatMessage(myUsername,text,imageBytes);
         Iterator<Chat> chatIterator = myUser.chats.iterator();
         while(chatIterator.hasNext()){
             Chat thisChat = chatIterator.next();
@@ -106,6 +114,8 @@ public class ChatController implements Initializable {
         oldChat.chatMessages.add(chatMessage);
         yaruUser.chats.add(oldChat);
         Gettings.writeUser(yaruUser.userFirstInfo.username,yaruUser);
+        imageView.setImage(null);
+        chatMessageTextField.setText(null);
         /*
         read textField and add message
          */
@@ -229,7 +239,7 @@ class ShowChatsClass extends Task<Void> {
                 });
             }
             try{
-                Thread.sleep(100);
+                Thread.sleep(1000);
             }catch(InterruptedException e){
                 System.out.println("INTRUPPTED EXCEPTION IN SHOWCHAT ChatController");
                 e.printStackTrace();

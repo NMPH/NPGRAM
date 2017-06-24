@@ -46,7 +46,7 @@ public class LoginController {
                 });
                 Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
                 ProfileController profileController=(ProfileController) loader.getController();
-                Scene scene = new Scene(root,600,500);
+                Scene scene = new Scene(root,650,900);
                 scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.show();

@@ -1,5 +1,6 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -89,25 +91,19 @@ public class PeopleProfileController implements Initializable{
         }else{
             followButton.setVisible(true);
         }
-        Image profileImage=null;
-        try {
+        BufferedImage profileImage=null;
+        if (userPeople.profilePicture != null) {
+            //BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
+            profileImage =  ImageFunctions.ByteArrayToBufferedImage(userPeople.profilePicture);;
+        }
             if (userPeople.profilePicture != null) {
-                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(userPeople.profilePicture));
-                profileImage = new Image(imageInputStream);
+                Image card = SwingFXUtils.toFXImage(profileImage, null );
+                profilePicture.setImage(card);
+                profilePicture.setClip(clip);
             }
-        }catch (IOException e){
-            System.out.println("problem in reading the user profile picture in PeopleProfileController Initializer()");
-            e.printStackTrace();
-        }
-        if(profileImage!=null) {
-            profilePicture.setImage(profileImage);
-            profilePicture.setClip(clip);
-        }
         this.bioLabel.setText(userPeople.bio);
         followersLabel.setText(new Integer(userPeople.followersUsernames.size()).toString());
         followingsLabel.setText(new Integer(userPeople.followingsUsernames.size()).toString());
-        if(myUser.followingsUsernames.contains(userPeople.userFirstInfo.username)){
             postLabel.setText((new Integer(userPeople.posts.size())).toString());
-        }
     }
 }

@@ -1,5 +1,11 @@
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,6 +16,13 @@ import java.util.Iterator;
  * Created by noyz on 6/21/17.
  */
 public class Gettings {
+    public static File getFileChooserImage(Stage stage){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select A Photo : ");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
+        );
+        return fileChooser.showOpenDialog(stage);
+    }
     public static boolean userExists(String username) {
         try {
             Socket server = new Socket("127.0.0.1", 1234);
