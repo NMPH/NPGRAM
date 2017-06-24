@@ -139,8 +139,8 @@ public class HomeCell extends ListCell<Post> {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(lastItem.image));
                 Image image = new Image(imageInputStream);
                 imageView.setImage(image);
-                imageView.setFitHeight(40);
-                imageView.setFitWidth(40);
+                imageView.setFitHeight(100);
+                imageView.setFitWidth(100);
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
                 e.printStackTrace();

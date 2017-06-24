@@ -14,11 +14,11 @@ import java.net.URL;
 
 public class ImageFunctions {
     public static byte[] bufferedImageToByteArray(
-            BufferedImage data) {
+            BufferedImage data,String format) {
         byte[] bytes=null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(data, "jpg", baos);
+            ImageIO.write(data, format, baos);
             bytes = baos.toByteArray();
             return bytes;
             //oos.writeObject(bytes);

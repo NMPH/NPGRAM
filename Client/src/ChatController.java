@@ -72,9 +72,11 @@ public class ChatController implements Initializable {
         File file =Gettings.getFileChooserImage((Stage) ((Node) event.getSource()).getScene().getWindow());
         if(file!=null) {
             try {
+                String fileName = file.getName();
+                String fileExtension = fileName.substring(fileName.indexOf(".") + 1, file.getName().length());
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
                 BufferedImage image = ImageIO.read(imageInputStream);
-                imageBytes= ImageFunctions.bufferedImageToByteArray(image);
+                imageBytes= ImageFunctions.bufferedImageToByteArray(image,fileExtension);
                 imageView.setImage(SwingFXUtils.toFXImage(image, null ));
             } catch (IOException e) {
                 System.out.println("ERROR while reading from image");
@@ -203,8 +205,9 @@ class ShowChatsClass extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        Chat chatToShow=null;
+        Chat chatToShow;
         while(!Thread.interrupted()){
+            chatToShow=null;
             System.out.println("hey");
             HashSet<Chat> chats = Gettings.getUser(myUsername).chats;
             Iterator<Chat> chatsIterator =chats.iterator();
@@ -235,6 +238,7 @@ class ShowChatsClass extends Task<Void> {
                     @Override public void run() {
                        // bar.setProgress(counter / 1000000.0);
                         ChatPane.getChildren().add(lv);
+
                     }
                 });
             }

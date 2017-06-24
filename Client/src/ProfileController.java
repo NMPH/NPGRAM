@@ -230,9 +230,11 @@ public class ProfileController implements Initializable {
         File file = fileChooser.showOpenDialog(stage);
         if(file!=null) {
             try {
+                String fileName = file.getName();
+                String fileExtension = fileName.substring(fileName.indexOf(".") + 1, file.getName().length());
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
                 BufferedImage image = ImageIO.read(imageInputStream);
-                byte[] imageBytes= ImageFunctions.bufferedImageToByteArray(image);
+                byte[] imageBytes= ImageFunctions.bufferedImageToByteArray(image,fileExtension);
                 profilePicture.setImage(SwingFXUtils.toFXImage(image, null ));
                 profilePicture.setClip(clip);
                 user.setProfilePicture(imageBytes);
