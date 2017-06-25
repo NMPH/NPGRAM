@@ -38,7 +38,14 @@ class User implements Serializable {
     UserFirstInfo userFirstInfo;
     HashSet<Chat> chats;
     boolean online;
-
+    @Override
+    public int hashCode(){
+         return userFirstInfo.username.hashCode() + userFirstInfo.password.hashCode()+userFirstInfo.fullName.hashCode();
+    }
+    @Override
+    public boolean equals(Object o){
+        return hashCode()==o.hashCode() ? true : false;
+    }
     User(UserFirstInfo userFirstInfo) {
         this.userFirstInfo = userFirstInfo;
         Private = false;
@@ -656,6 +663,7 @@ class serverThread implements Runnable {
         Scanner commandGetter = new Scanner(System.in);
         try {
             ServerSocket server = new ServerSocket(1234);
+            //ServerSocket server = new ServerSocket(1234);
             Waiter waiter = new Waiter(server, userFiles, usersFirstInfo);
             Thread t = new Thread(waiter);
             t.start();
@@ -665,6 +673,7 @@ class serverThread implements Runnable {
                 if ((command.equals("exit"))) {
                     FileHandler.writeUserFilesAndUsers(userFiles,usersFirstInfo);
                     server.close();
+
                     return;
                 }
             }

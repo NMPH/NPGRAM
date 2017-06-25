@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.net.ServerSocket;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -34,8 +35,7 @@ public class ServerGUIPageController implements Initializable {
         ServerGui serverGuiThread = new ServerGui(userFiles,userFirstInfos,stage,onlinePeoplePane,allPeoplePane,offlinePeoplePane);
         Thread t = new Thread(serverGuiThread);
         t.start();
-        Stage stage = new Stage();
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        stage.setOnHiding(new EventHandler<WindowEvent>() {
 
             @Override
             public void handle(WindowEvent event) {
