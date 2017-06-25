@@ -1,8 +1,10 @@
 
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import sun.misc.JavaObjectInputStreamAccess;
 import sun.util.resources.cldr.ebu.CalendarData_ebu_KE;
 
@@ -545,7 +547,7 @@ class Waiter implements Runnable {
     }
 }
 
-public class Server {
+public class Server extends Application{
     public static void inits() {
         File usersDir = new File("data/Users");
         if (!usersDir.exists()) {
@@ -582,10 +584,75 @@ public class Server {
         primaryStage.show();
     }*/
     public static void main(String[] args) {
+        launch(args);
+
+
+/*        Scanner commandGetter = new Scanner(System.in);
+        try {
+            ServerSocket server = new ServerSocket(1234);
+            Waiter waiter = new Waiter(server, userFiles, usersFirstInfo);
+            Thread t = new Thread(waiter);
+            t.start();
+
+            while (true) {
+                String command = commandGetter.next();
+                if ((command.equals("exit"))) {
+                    FileHandler.writeUserFilesAndUsers(userFiles,usersFirstInfo);
+                 *//*   for (SocketAndStreams i : waiter.sockets) {
+                        if ((!i.socket.isClosed()) && (i.socket.isConnected())) {
+                           // i.objectOutputStream.writeFloat(2);
+                            i.objectOutputStream.flush();
+                            i.objectOutputStream.close();
+                        }
+                    }*//*
+                    server.close();
+                    return;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Problem While making server");
+            e.printStackTrace();
+        }*/
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
         inits();
         HashSet<User> userFiles = new HashSet<User>();
         HashSet<UserFirstInfo> usersFirstInfo = new HashSet<UserFirstInfo>();
         setHashSetsFromFiles(userFiles, usersFirstInfo);
+        serverThread serverThread = new serverThread(userFiles,usersFirstInfo);
+        Thread t = new Thread(serverThread);
+        t.start();
+        try{
+            FXMLLoader loader=new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new ServerGUIPageController(userFiles,usersFirstInfo,stage);
+            });
+            Parent root=loader.load(getClass().getResource("ServerGUIPage.fxml").openStream());
+            ServerGUIPageController serverGUIPageController=(ServerGUIPageController) loader.getController();
+            Scene scene=new Scene(root);
+            //scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+
+        }catch (IOException e){
+            System.out.println("problem in showSearch function in Showings");
+        }
+    }
+}
+class serverThread implements Runnable {
+    HashSet<User> userFiles;
+    HashSet<UserFirstInfo> usersFirstInfo;
+    public serverThread(HashSet<User> userFiles,HashSet<UserFirstInfo> usersFirstInfo){
+        this.userFiles=userFiles;
+        this.usersFirstInfo=usersFirstInfo;
+    }
+
+    @Override
+    public void run() {
+        Server.inits();
+        Server.setHashSetsFromFiles(userFiles, usersFirstInfo);
         Scanner commandGetter = new Scanner(System.in);
         try {
             ServerSocket server = new ServerSocket(1234);
@@ -597,13 +664,6 @@ public class Server {
                 String command = commandGetter.next();
                 if ((command.equals("exit"))) {
                     FileHandler.writeUserFilesAndUsers(userFiles,usersFirstInfo);
-                 /*   for (SocketAndStreams i : waiter.sockets) {
-                        if ((!i.socket.isClosed()) && (i.socket.isConnected())) {
-                           // i.objectOutputStream.writeFloat(2);
-                            i.objectOutputStream.flush();
-                            i.objectOutputStream.close();
-                        }
-                    }*/
                     server.close();
                     return;
                 }

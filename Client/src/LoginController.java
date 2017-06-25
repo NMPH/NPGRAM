@@ -38,6 +38,7 @@ public class LoginController {
             if(isLogin){
                 user = Gettings.getUser(usernameText.getText());
                 user.online=true;
+                Gettings.writeUser(user.userFirstInfo.username,user);
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
                 Showings.showProfile(this,usernameText.getText());
