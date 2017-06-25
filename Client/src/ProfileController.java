@@ -129,6 +129,7 @@ public class ProfileController implements Initializable {
         while (postIterator.hasNext()){
             list.add(postIterator.next());
         }
+        //ProfileController profileController =this;
         ListView<Post> lv = new ListView<>(list);
         lv.setCellFactory(new Callback<ListView<Post>, ListCell<Post>>() {
             @Override

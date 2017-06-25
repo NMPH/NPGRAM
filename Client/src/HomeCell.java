@@ -28,6 +28,8 @@ public class HomeCell extends ListCell<Post> {
     HBox hbox = new HBox();
     VBox firstPostInfoVBox = new VBox();
     VBox likeVBox = new VBox();
+    VBox removeVBox = new VBox();
+    Button removePostButton = new Button();
     Label caption = new Label("(empty)");
     Label owner = new Label("(empty");
     Pane pane = new Pane();
@@ -44,10 +46,19 @@ public class HomeCell extends ListCell<Post> {
     public HomeCell(User myUser) {
         super();
         this.myUser=myUser;
+        removeVBox.getChildren().addAll(removePostButton);
         firstPostInfoVBox.getChildren().addAll(imageView, pane, caption,owner,dateCreated, likeCount, comments,commentTextField,commentButton);
         likeVBox.getChildren().addAll(likeButton,unlikeButton);
-        hbox.getChildren().addAll(firstPostInfoVBox,likeVBox);
+        hbox.getChildren().addAll(firstPostInfoVBox,likeVBox,removeVBox);
         HBox.setHgrow(pane, Priority.ALWAYS);
+        removePostButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                myUser.posts.remove(lastItem);
+                Gettings.writeUser(myUser.userFirstInfo.username,myUser);
+                hbox.setVisible(false);
+            }
+        });
         commentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -125,6 +136,11 @@ public class HomeCell extends ListCell<Post> {
         likeButton.setText("Like!");
         unlikeButton.setText("unLike :(");
     }
+    void initRemoveHBox(Post item){
+        removePostButton.setText("Remove Post");
+        if(!lastItem.ownerUsername.equals(myUser.userFirstInfo.username))
+            removePostButton.setVisible(false);
+    }
     void initFirstPostInfoHBox(Post item){
         likeCount.setText("likes: "+ (new Integer(item.likes.size()).toString()));
         commentButton.setText("post comment");
@@ -166,6 +182,7 @@ public class HomeCell extends ListCell<Post> {
             lastItem = item;
             initFirstPostInfoHBox(item);
             initLikeHBox(item);
+            initRemoveHBox(item);
             setGraphic(hbox);
         }
     }

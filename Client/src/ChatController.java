@@ -100,6 +100,7 @@ public class ChatController implements Initializable {
                 System.out.println("chat removed");
             }
         }
+        chatMessage.text=myUsername+ ": "+ chatMessage.text;
         oldChat.chatMessages.add(chatMessage);
         myUser.chats.add(oldChat);
         Gettings.writeUser(myUser.userFirstInfo.username,myUser);

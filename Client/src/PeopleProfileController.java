@@ -47,6 +47,8 @@ public class PeopleProfileController implements Initializable{
     public void block(ActionEvent event){
         myUser.blockedUsernames.add(userPeople.userFirstInfo.username);
         userPeople.blockedByUsernames.add(myUser.userFirstInfo.username);
+        myUser.followersUsernames.remove(userPeople.userFirstInfo.username);
+        userPeople.followingsUsernames.remove(myUser.userFirstInfo.username);
         Gettings.writeUser(userPeople.userFirstInfo.username,userPeople);
         Gettings.writeUser(myUser.userFirstInfo.username,myUser);
         blockButton.setVisible(false);

@@ -6,8 +6,11 @@
  */
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -18,6 +21,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sun.misc.Cache;
+
+import java.io.IOException;
 
 /**
  * Created by noyz on 6/22/17.
@@ -47,6 +52,22 @@ public class NewChatCell extends ListCell<String> {
                 toChatUser.chats.add(newChat);
                 Gettings.writeUser(toChatUser.userFirstInfo.username,toChatUser);
                 Gettings.writeUser(myUser.userFirstInfo.username,myUser);
+                try {
+                    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setControllerFactory(c -> {
+                        return new ChatController(newChat,primaryStage,myUser.userFirstInfo.username);
+                    });
+                    Parent root = loader.load(getClass().getResource("Chat.fxml").openStream());
+                    ChatController chatController = (ChatController) loader.getController();
+                    Scene scene = new Scene(root);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                } catch (IOException e) {
+                    System.out.println("Problem in showChooseChats");
+                    e.printStackTrace();
+                }
                 //open chat xml file which contains chatCell
             }
         });
