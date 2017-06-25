@@ -1,4 +1,7 @@
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import sun.misc.JavaObjectInputStreamAccess;
 import sun.util.resources.cldr.ebu.CalendarData_ebu_KE;
@@ -32,6 +35,8 @@ class User implements Serializable {
     TreeSet<Post> posts;
     UserFirstInfo userFirstInfo;
     HashSet<Chat> chats;
+    boolean online;
+
     User(UserFirstInfo userFirstInfo) {
         this.userFirstInfo = userFirstInfo;
         Private = false;
@@ -40,55 +45,72 @@ class User implements Serializable {
         followingsUsernames = new HashSet<String>();
         followRequestsSent = new HashSet<String>();
         followRequestsRecieved = new HashSet<String>();
-        blockedUsernames = new HashSet<String >();
-        blockedByUsernames = new HashSet<String >();
+        blockedUsernames = new HashSet<String>();
+        blockedByUsernames = new HashSet<String>();
         chats = new HashSet<Chat>();
 
     }
-    public HashSet<String> getChattersSet(){
+    public static User getUserFromHashSet(HashSet<User> userFile,String username){
+        Iterator<User> userIterator = userFile.iterator();
+        while(userIterator.hasNext()){
+            User thisUser = userIterator.next();
+            if(thisUser.userFirstInfo.username.equals(username)){
+                return thisUser;
+            }
+        }
+        return null;
+
+    }
+    public HashSet<String> getChattersSet() {
         HashSet<String> usernames = new HashSet<String>();
-        Iterator<Chat> chatIterator= chats.iterator();
-        while(chatIterator.hasNext()){
+        Iterator<Chat> chatIterator = chats.iterator();
+        while (chatIterator.hasNext()) {
             Chat chat = chatIterator.next();
-            if(chat.chatter1.equals(userFirstInfo.username)){
+            if (chat.chatter1.equals(userFirstInfo.username)) {
                 usernames.add(chat.chatter2);
-            }else{
+            } else {
                 usernames.add(chat.chatter1);
             }
         }
         return usernames;
     }
-    public boolean removePostByHashCode(int hashcode){
-        Iterator<Post> postIterator= posts.iterator();
-        while(postIterator.hasNext()){
+
+    public boolean removePostByHashCode(int hashcode) {
+        Iterator<Post> postIterator = posts.iterator();
+        while (postIterator.hasNext()) {
             Post post = postIterator.next();
-            if(post.hashCode()==hashcode) {
+            if (post.hashCode() == hashcode) {
                 posts.remove(post);
                 return true;
             }
         }
         return false;
     }
+
     public boolean isBlockedBy(String username) {
         if (blockedByUsernames.contains(username))
             return true;
         return false;
     }
+
     public boolean isFollowedBy(String username) {
         if (followersUsernames.contains(username))
             return true;
         return false;
     }
-    public boolean isFollowRequestSent(String username){
-        if(this.followRequestsSent.contains(username))
+
+    public boolean isFollowRequestSent(String username) {
+        if (this.followRequestsSent.contains(username))
             return true;
         return false;
     }
-    public boolean isFollowRequestRecieved(String username){
-        if(this.followRequestsRecieved.contains(username))
+
+    public boolean isFollowRequestRecieved(String username) {
+        if (this.followRequestsRecieved.contains(username))
             return true;
         return false;
     }
+
     public boolean isFollowing(String username) {
         if (followingsUsernames.contains(username))
             return true;
@@ -99,118 +121,133 @@ class User implements Serializable {
         this.profilePicture = profilePicture;
     }
 }
-class ChatMessage implements Serializable{
+
+class ChatMessage implements Serializable {
     String owner;
     String text;
     byte[] image;
-    ChatMessage(String owner, String text,byte[] image){
-        this.text=text;
-        this.image=image;
-        this.owner=owner;
+
+    ChatMessage(String owner, String text, byte[] image) {
+        this.text = text;
+        this.image = image;
+        this.owner = owner;
     }
 }
-class Chat implements Serializable{
+
+class Chat implements Serializable {
     @Override
-    public int hashCode(){
-        return chatter1.hashCode()+chatter2.hashCode();
+    public int hashCode() {
+        return chatter1.hashCode() + chatter2.hashCode();
     }
+
     @Override
-    public  boolean equals(Object object){
-        return hashCode()==object.hashCode() ? true :false;
+    public boolean equals(Object object) {
+        return hashCode() == object.hashCode() ? true : false;
     }
-    public boolean containsChatter(String chatter){
-        if(chatter1.equals(chatter)||chatter2.equals(chatter))
+
+    public boolean containsChatter(String chatter) {
+        if (chatter1.equals(chatter) || chatter2.equals(chatter))
             return true;
         return false;
     }
+
     String chatter1;
     String chatter2;
     ArrayList<ChatMessage> chatMessages;
-    Chat(String chatter1, String chatter2){
-        this.chatter1=chatter1;
-        this.chatter2=chatter2;
-        chatMessages= new ArrayList<ChatMessage>();
+
+    Chat(String chatter1, String chatter2) {
+        this.chatter1 = chatter1;
+        this.chatter2 = chatter2;
+        chatMessages = new ArrayList<ChatMessage>();
     }
 
 }
-class Post implements Serializable ,Comparable<Post>{
+
+class Post implements Serializable, Comparable<Post> {
     @Override
     public int compareTo(Post post) {
-        int ret= -date.compareTo(post.date);
+        int ret = -date.compareTo(post.date);
         return ret;
     }
 
-    class PostDate implements Serializable,Comparable<PostDate>{
+    class PostDate implements Serializable, Comparable<PostDate> {
         int year;
         int month;
         int day;
         int hour;
         int minute;
         int seconds;
-        PostDate(){
-            Date date =new Date();
+
+        PostDate() {
+            Date date = new Date();
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             year = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
             day = cal.get(Calendar.DAY_OF_MONTH);
-            hour=cal.get(Calendar.HOUR_OF_DAY);
-            minute=cal.get(Calendar.MINUTE);
-            seconds= cal.get(Calendar.SECOND);
+            hour = cal.get(Calendar.HOUR_OF_DAY);
+            minute = cal.get(Calendar.MINUTE);
+            seconds = cal.get(Calendar.SECOND);
         }
+
         @Override
-        public int hashCode(){
-            return year*month*day;
+        public int hashCode() {
+            return year * month * day;
         }
+
         @Override
-        public String toString(){
-            return year+"/"+month+"/"+day +" on:"+ hour +": "+minute;
+        public String toString() {
+            return year + "/" + month + "/" + day + " on:" + hour + ": " + minute;
         }
 
         @Override
         public int compareTo(PostDate postDate) {
-            if(year!=postDate.year)
-                return year-postDate.year;
-            if(month!=postDate.month)
-                return month-postDate.month;
-            if(day!=postDate.day)
-                return day-postDate.day;
-            if(hour!=postDate.hour)
-                return hour-postDate.hour;
-            if(day!=postDate.day)
-                return day-postDate.day;
-            return seconds-postDate.seconds;
+            if (year != postDate.year)
+                return year - postDate.year;
+            if (month != postDate.month)
+                return month - postDate.month;
+            if (day != postDate.day)
+                return day - postDate.day;
+            if (hour != postDate.hour)
+                return hour - postDate.hour;
+            if (day != postDate.day)
+                return day - postDate.day;
+            return seconds - postDate.seconds;
         }
     }
+
     ArrayList<String> likes;
     ArrayList<NPComment> comments;
     String caption;
     byte[] image;
     String ownerUsername;
     PostDate date;
-    Post(byte[] image, String caption,String ownerUsername) {
-        this.ownerUsername=ownerUsername;
+
+    Post(byte[] image, String caption, String ownerUsername) {
+        this.ownerUsername = ownerUsername;
         this.image = image;
-        this.caption=caption;
+        this.caption = caption;
         comments = new ArrayList<NPComment>();
-        likes= new ArrayList<String >();
+        likes = new ArrayList<String>();
         date = new PostDate();
     }
-    Post(Post post){
+
+    Post(Post post) {
         this.ownerUsername = post.ownerUsername;
-        this.image=post.image;
-        this.caption=post.caption;
-        this.comments=post.comments;
-        this.likes=post.likes;
-        this.date=post.date;
+        this.image = post.image;
+        this.caption = post.caption;
+        this.comments = post.comments;
+        this.likes = post.likes;
+        this.date = post.date;
     }
+
     @Override
-    public int hashCode(){
-        return caption.length()*3+(int)image.length+ownerUsername.length()+date.hashCode();
+    public int hashCode() {
+        return caption.length() * 3 + (int) image.length + ownerUsername.length() + date.hashCode();
     }
 }
 
-class NPComment implements Serializable{
+class NPComment implements Serializable {
     String username;
     String text;
 
@@ -247,94 +284,138 @@ class SocketAndStreams {
         this.objectInputStream = objectInputStream;
     }
 }
-class FileHandler{
-    synchronized public static ArrayList<Byte> getIcon(String path){
+
+class FileHandler {
+    synchronized public static void writeUserFilesAndUsers(HashSet<User> userFile, HashSet<UserFirstInfo> users){
+        File usersFirstInfoFile = new File("data/users.ser");
+        usersFirstInfoFile.delete();
+        try {
+            usersFirstInfoFile.createNewFile();
+            FileOutputStream fileOutputStream = new FileOutputStream(usersFirstInfoFile);
+            ObjectOutputStream fileObjectOutputStream = new ObjectOutputStream(fileOutputStream);
+            fileObjectOutputStream.writeObject(users);
+        }catch (IOException e){
+            System.out.println("Exception while writing files :(");
+            e.printStackTrace();
+        }
+        Iterator<UserFirstInfo> userFirstInfoIterator = users.iterator();
+        while(userFirstInfoIterator.hasNext()){
+            UserFirstInfo thisUserFirstInfo = userFirstInfoIterator.next();
+            File thisUserFile = new File("data/Users/" + thisUserFirstInfo.username + "/" + "users.ser");
+            File userFolder = new File("data/Users/"+ thisUserFirstInfo.username);
+            thisUserFile.delete();
+            try{
+                userFolder.mkdirs();
+                thisUserFile.createNewFile();
+                FileOutputStream fileOutputStream = new FileOutputStream(thisUserFile);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+                objectOutputStream.writeObject(User.getUserFromHashSet(userFile,thisUserFirstInfo.username));
+            }catch (IOException e){
+                System.out.println("Problem while writing into each user file");
+                e.printStackTrace();
+            }
+        }
+
+    }
+    synchronized public static User getUser(String username) {
+        User retUser = null;
+        try {
+            File userFile = new File("data/Users/" + username + "/" + "users.ser");
+            FileInputStream userFileInputStream = new FileInputStream(userFile);
+            ObjectInputStream userObjectInputStream = new ObjectInputStream(userFileInputStream);
+            return retUser = ((User) userObjectInputStream.readObject());
+        } catch (IOException e) {
+            System.out.println("Problem while reading user file");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("class not found?!!!!!! wtf!!! in getUser");
+            e.printStackTrace();
+        }
+        return retUser;
+
+    }
+
+    synchronized public static ArrayList<Byte> getIcon(String path) {
         ArrayList<Byte> byteArrayList = new ArrayList<Byte>();
         File iconFile = new File(path);
         try {
             FileInputStream fileInputStream = new FileInputStream(iconFile);
             int i;
-            while((i=fileInputStream.read())!=-1){
-                byteArrayList.add((byte)i);
+            while ((i = fileInputStream.read()) != -1) {
+                byteArrayList.add((byte) i);
             }
             fileInputStream.close();
             return byteArrayList;
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("icon profileImage Sending PROBLEM");
             e.printStackTrace();
         }
         return byteArrayList;
 
     }
-    synchronized public static  ArrayList<UserFirstInfo> getUsersFile(){
-        ArrayList<UserFirstInfo> users=null;
+
+    synchronized public static HashSet<UserFirstInfo> getUsersFile() {
+        HashSet<UserFirstInfo> users = null;
         try {
             File usersFile = new File("data/users.ser");
             FileInputStream fileInputStream = new FileInputStream(usersFile);
             ObjectInputStream userFileInput = new ObjectInputStream(fileInputStream);
-            users = (ArrayList<UserFirstInfo>) (userFileInput.readObject());
+            users = (HashSet<UserFirstInfo>) (userFileInput.readObject());
             fileInputStream.close();
             userFileInput.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("problem getUsersFIle");
             e.printStackTrace();
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.out.println("CLASS NOT FOUND getUsersFile");
             e.printStackTrace();
         }
         return users;
     }
-    synchronized public static void writeUsersFile( ArrayList<UserFirstInfo> usersArrayList){
-        try{
-            File usersFile = new File("data/users.ser");
-            FileOutputStream fileOutputStream =new FileOutputStream(usersFile);
-            ObjectOutputStream allUserFileOutputStream = new ObjectOutputStream(fileOutputStream);
-            allUserFileOutputStream.writeObject(usersArrayList);
-            allUserFileOutputStream.close();
-            fileOutputStream.close();
-        }catch (IOException e){
-            System.out.println("writeUsersFile Exception");
-            e.printStackTrace();
-        }
-    }
 
 }
+
 class SocketHandler implements Runnable {
     Socket socket;
     ObjectInputStream inputFromSocket;
     ObjectOutputStream outputToSocket;
+    HashSet<User> userFile;
+    HashSet<UserFirstInfo> usersFirstInfos;
 
-    public SocketHandler(Socket socket, ObjectInputStream inputFromSocket, ObjectOutputStream outputToSocket) {
+    public SocketHandler
+            (Socket socket, ObjectInputStream inputFromSocket,
+             ObjectOutputStream outputToSocket, HashSet<User> userFile, HashSet<UserFirstInfo> usersFirstInfos) {
         this.socket = socket;
         this.inputFromSocket = inputFromSocket;
         this.outputToSocket = outputToSocket;
+        this.userFile = userFile;
+        this.usersFirstInfos = usersFirstInfos;
     }
 
     @Override
-     public void run() {
+    public void run() {
         try {
             String command = (String) inputFromSocket.readObject();
             if (command.equals("get user")) {
                 command = command;
             }
             switch (command) {
-                case "get_home_icon" :{
+                case "get_home_icon": {
                     outputToSocket.writeObject(FileHandler.getIcon("data/InitData/home-button.png"));
                     break;
                 }
-                case "get_init_image":{
+                case "get_init_image": {
                     outputToSocket.writeObject(FileHandler.getIcon("data/InitData/initImage.jpg"));
                     break;
                 }
-                case "get_refresh_icon":{
+                case "get_refresh_icon": {
                     outputToSocket.writeObject(FileHandler.getIcon("data/InitData/Refresh_icon.png"));
                     break;
                 }
                 case "login": {
                     String usernameEntered = ((String) inputFromSocket.readObject());
                     String passwordEntered = ((String) inputFromSocket.readObject());
-                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
-                    Iterator<UserFirstInfo> userFirstInfoIterator = users.iterator();
+                    Iterator<UserFirstInfo> userFirstInfoIterator = usersFirstInfos.iterator();
                     boolean isLoginCorrect = false;
                     while (userFirstInfoIterator.hasNext()) {
                         UserFirstInfo userFirstInfo = userFirstInfoIterator.next();
@@ -353,72 +434,44 @@ class SocketHandler implements Runnable {
                 case "write user": {
                     String oldUsername = ((String) inputFromSocket.readObject());
                     User newUserFile = ((User) inputFromSocket.readObject());
-                    File userFile = new File("data/Users/" + oldUsername + "/" + "users.ser");
-                    File userFolder = new File("data/Users/" + oldUsername);
-                    try {
                         //changing user file to the new one
-                        FileOutputStream usersFileOutputStream = new FileOutputStream(userFile);
-                        ObjectOutputStream usersOutputStream = new ObjectOutputStream(usersFileOutputStream);
-                        usersOutputStream.writeObject(newUserFile);
-                        usersOutputStream.close();
-                        usersFileOutputStream.close();
                         //changing the allUserFile
-                        ArrayList<UserFirstInfo> usersArrayList = FileHandler.getUsersFile();
-                        Iterator<UserFirstInfo> userFirstInfoIterator = usersArrayList.iterator();
-                        while (userFirstInfoIterator.hasNext()) {
+                    Iterator<UserFirstInfo> userFirstInfoIterator = usersFirstInfos.iterator();
+                    User oldUser = User.getUserFromHashSet(userFile,oldUsername);
+                    userFile.remove(oldUser);
+                    userFile.add(newUserFile);
+                    while (userFirstInfoIterator.hasNext()) {
                             UserFirstInfo thisUserFirstInfo = userFirstInfoIterator.next();
-                            //not changing it!!!
-                            if (thisUserFirstInfo.username.equals(oldUsername)) {
-                                //thisUserFirstInfo=newUserFile.userFirstInfo;
+                            if(thisUserFirstInfo.username.equals(oldUsername)){
                                 userFirstInfoIterator.remove();
-                                usersArrayList.add(newUserFile.userFirstInfo);
+                                usersFirstInfos.add(newUserFile.userFirstInfo);
                                 break;
                             }
+                            //not changing it!!!
+                            /*userFile.remove(User.getUserFromHashSet(userFile,oldUsername));
+                                userFile.add(newUserFile);
+                                userFirstInfoIterator.remove();
+                                usersFirstInfos.add(newUserFile.userFirstInfo);
+                                break;*/
                         }
-                        FileHandler.writeUsersFile(usersArrayList);
-
-                    } catch (IOException e) {
-                        System.out.println("Problem while writing user");
-                        e.printStackTrace();
-                    }
-                    if (!newUserFile.userFirstInfo.username.equals(oldUsername)) {
-                        /*
-                        this is not just writing!
-                        we should also change the folder name because the username has changed!!!
-                         */
-                        File newName = new File("data/Users/" + newUserFile.userFirstInfo.username);
-                        userFolder.renameTo(newName);
-
-                    } else {
-                        //just write!
-
-                    }
 
                     break;
                 }
                 case "get user": {
                     String username = ((String) inputFromSocket.readObject());
-                    File userFile = new File("data/Users/" + username + "/" + "users.ser");
-                    FileInputStream userFileInputStream = new FileInputStream(userFile);
-                    ObjectInputStream userObjectInputStream = new ObjectInputStream(userFileInputStream);
-                    outputToSocket.writeObject(userObjectInputStream.readObject());
+                    outputToSocket.writeObject(User.getUserFromHashSet(userFile,username));
                     outputToSocket.flush();
                     System.out.println("FUCK");
                     //just wrote user file!
-                    userFileInputStream.close();
-                    userObjectInputStream.close();
                     break;
                 }
                 case "get users": {
-                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
-                    HashSet<String> usernames = new HashSet<>();
-                    Iterator<UserFirstInfo> userIterator = users.iterator();
-                    while (userIterator.hasNext()) {
-                        usernames.add(userIterator.next().username);
+                    HashSet<String> usernames = new HashSet<String>();
+                    Iterator<UserFirstInfo> userFirstInfoIterator = usersFirstInfos.iterator();
+                    while(userFirstInfoIterator.hasNext()){
+                        usernames.add(userFirstInfoIterator.next().username);
                     }
                     outputToSocket.writeObject(usernames);
-                    outputToSocket.close();
-                    inputFromSocket.close();
                     break;
                 }
                 case "sign_up": {
@@ -427,31 +480,11 @@ class SocketHandler implements Runnable {
                     String password = ((String) inputFromSocket.readObject());
                     UserFirstInfo newUserFirstInfo = new UserFirstInfo(fullName, username, password);
                     User newUser = new User(newUserFirstInfo);
-                    //setting initImage
-                   /* File userInitImage = new File("data/InitData/initImage.jpg");
-                    System.out.println(userInitImage.exists());
-                    FileInputStream userFileInputStream = new FileInputStream(userInitImage);
-                    newUser.setProfilePicture(userInitImage);*/
-                    File newUserFolder = new File("data/Users/" + newUser.userFirstInfo.username);
-                    newUserFolder.mkdir();
-                    File newUserFile = new File("data/Users/" + newUser.userFirstInfo.username + "/" + "users.ser");
-                    newUserFile.createNewFile();
-                    try {
-                        FileOutputStream fileOutputStream = new FileOutputStream(newUserFile);
-                        ObjectOutputStream usersOutputStream = new ObjectOutputStream(fileOutputStream);
-                        usersOutputStream.writeObject(newUser);
-                        usersOutputStream.close();
-                        fileOutputStream.close();
-                    } catch (IOException e) {
-                        System.out.println("Problem while serializing the user data");
-                        e.printStackTrace();
-                    }
+                    userFile.add(newUser);
 /*                    if (!usersFile.exists()) {
                         usersFile.createNewFile();
                     }*/
-                    ArrayList<UserFirstInfo> users = FileHandler.getUsersFile();
-                    users.add(newUserFirstInfo);
-                    FileHandler.writeUsersFile(users);
+                    usersFirstInfos.add(newUser.userFirstInfo);
                     outputToSocket.writeBoolean(true);
                     outputToSocket.flush();
                     //userFileInputStream.close();
@@ -478,10 +511,14 @@ class Waiter implements Runnable {
     static int count;
     ServerSocket server;
     ArrayList<SocketAndStreams> sockets;
+    HashSet<User> userFiles;
+    HashSet<UserFirstInfo> usersFirstInfo;
 
-    Waiter(ServerSocket server) {
+    Waiter(ServerSocket server, HashSet<User> userFiles, HashSet<UserFirstInfo> usersFirstInfo) {
         sockets = new ArrayList<SocketAndStreams>();
         this.server = server;
+        this.userFiles = userFiles;
+        this.usersFirstInfo = usersFirstInfo;
     }
 
     @Override
@@ -494,7 +531,7 @@ class Waiter implements Runnable {
                 if (socket != null)
                     sockets.add(new SocketAndStreams(socket, inputFromSocket, outputToSocket));
                 count++;
-                SocketHandler socketHandler = new SocketHandler(socket, inputFromSocket, outputToSocket);
+                SocketHandler socketHandler = new SocketHandler(socket, inputFromSocket, outputToSocket, userFiles, usersFirstInfo);
                 Thread t = new Thread(socketHandler);
                 t.start();
             } catch (Exception e) {
@@ -518,7 +555,7 @@ public class Server {
         try {
             if (!users_file.exists()) {
                 users_file.createNewFile();
-                ArrayList<User> users = new ArrayList<User>();
+                HashSet<UserFirstInfo> users = new HashSet<UserFirstInfo>();
                 ObjectOutputStream userOutput = new ObjectOutputStream(new FileOutputStream(users_file));
                 userOutput.writeObject(users);
                 userOutput.close();
@@ -529,25 +566,44 @@ public class Server {
         }
     }
 
+    public static void setHashSetsFromFiles(HashSet<User> userFiles, HashSet<UserFirstInfo> usersFirstInfo) {
+        Iterator<UserFirstInfo> userFirstInfoIterator = FileHandler.getUsersFile().iterator();
+        while (userFirstInfoIterator.hasNext()) {
+            UserFirstInfo userFirstInfo = userFirstInfoIterator.next();
+            userFiles.add(FileHandler.getUser(userFirstInfo.username));
+            usersFirstInfo.add(userFirstInfo);
+        }
+    }
+/*    public static void openGUI(){
+        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Scene scene = new Scene(root,600,400);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }*/
     public static void main(String[] args) {
         inits();
+        HashSet<User> userFiles = new HashSet<User>();
+        HashSet<UserFirstInfo> usersFirstInfo = new HashSet<UserFirstInfo>();
+        setHashSetsFromFiles(userFiles, usersFirstInfo);
         Scanner commandGetter = new Scanner(System.in);
         try {
             ServerSocket server = new ServerSocket(1234);
-            Waiter waiter = new Waiter(server);
+            Waiter waiter = new Waiter(server, userFiles, usersFirstInfo);
             Thread t = new Thread(waiter);
             t.start();
 
             while (true) {
                 String command = commandGetter.next();
-                if ((command.compareTo("exit")) == 0) {
-                    for (SocketAndStreams i : waiter.sockets) {
+                if ((command.equals("exit"))) {
+                    FileHandler.writeUserFilesAndUsers(userFiles,usersFirstInfo);
+                 /*   for (SocketAndStreams i : waiter.sockets) {
                         if ((!i.socket.isClosed()) && (i.socket.isConnected())) {
-                            i.objectOutputStream.writeFloat(2);
+                           // i.objectOutputStream.writeFloat(2);
                             i.objectOutputStream.flush();
                             i.objectOutputStream.close();
                         }
-                    }
+                    }*/
                     server.close();
                     return;
                 }

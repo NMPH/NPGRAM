@@ -1,9 +1,12 @@
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -22,7 +25,21 @@ public class Showings  {
             Pane root=loader.load(classObject.getClass().getResource("Profile.fxml").openStream());
             ProfileController profileController=(ProfileController) loader.getController();
             Scene profileScene = new Scene(root,650,900);
+            profileStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    Platform.runLater(new Runnable() {
 
+                        @Override
+                        public void run() {
+                            User user =Gettings.getUser(username);
+                            user.online=false;
+                            Gettings.writeUser(username,user);
+                            System.out.println("offline");
+                        }
+                    });
+                }
+            });
             profileScene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
             profileStage.setScene(profileScene);
             profileStage.show();

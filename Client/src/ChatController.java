@@ -199,12 +199,6 @@ class ShowChatsClass extends Task<Void> {
         this.ChatPane=ChatPane;
         this.stage=primaryStage;
     }
-/*    @Override
-    public void run() {
-
-
-    }*/
-
     @Override
     protected Void call() throws Exception {
         Chat chatToShow;

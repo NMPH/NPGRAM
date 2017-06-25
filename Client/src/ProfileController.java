@@ -227,7 +227,6 @@ public class ProfileController implements Initializable {
         Stage searchStage= Showings.showSearch(this,username);
         stage.close();
         searchStage.setOnHiding(new EventHandler<WindowEvent>() {
-
             @Override
             public void handle(WindowEvent event) {
                 Platform.runLater(new Runnable() {

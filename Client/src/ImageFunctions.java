@@ -36,7 +36,7 @@ public class ImageFunctions {
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(
                     byteArray);
-             image = ImageIO.read(bais);
+            image = ImageIO.read(bais);
             return image;
         }catch (IOException e){
             System.out.println("problem while converting byte array to buffered Image");

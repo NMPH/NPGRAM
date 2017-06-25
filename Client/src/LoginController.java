@@ -33,32 +33,19 @@ public class LoginController {
     @FXML
     private Label loginFailure;
     public void Login(ActionEvent event) {
-        try {
+        //try {
             boolean isLogin= Gettings.isLogin(usernameText.getText(),passwordText.getText());
             if(isLogin){
-                setUser(usernameText.getText());
+                user = Gettings.getUser(usernameText.getText());
+                user.online=true;
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
-                Stage primaryStage=new Stage();
-                FXMLLoader loader=new FXMLLoader();
-                loader.setControllerFactory(c -> {
-                    return new ProfileController(usernameText.getText());
-                });
-                Pane root=loader.load(getClass().getResource("Profile.fxml").openStream());
-                ProfileController profileController=(ProfileController) loader.getController();
-                Scene scene = new Scene(root,650,900);
-                scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-                primaryStage.setScene(scene);
-                primaryStage.show();
+                Showings.showProfile(this,usernameText.getText());
                 System.out.println("LOGIN!!!");
             }else{
                 loginFailure.setText("invalid username or password");
                 System.out.println("WRONG INFO");
             }
-        } catch (IOException e) {
-            System.out.println("Problem while Login");
-            e.printStackTrace();
-        }
     }
     public void SignUp(ActionEvent event){
         Stage stage = new Stage();

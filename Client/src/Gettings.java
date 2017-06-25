@@ -118,7 +118,7 @@ public class Gettings {
             ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
             objectOutputStream.writeObject("get users");
             objectOutputStream.flush();
-            HashSet<String> usernames = ((HashSet<String>) objectInputStream.readObject());
+            HashSet<String > usernames = ((HashSet<String>) objectInputStream.readObject());
             return usernames;
         }catch (IOException e){
             System.out.println("Problem in Gettings.getUsers");
