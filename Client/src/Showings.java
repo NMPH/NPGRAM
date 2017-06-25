@@ -15,8 +15,16 @@ import java.lang.reflect.Method;
  * Created by noyz on 6/21/17.
  */
 public class Showings  {
+    public static void setUserOnline(String username){
+            User user = Gettings.getUser(username);
+            if(user!=null){
+                user.online=true;
+                Gettings.writeUser(username,user);
+            }
+    }
     public static void showProfile(Object classObject,String username){
         try{
+            setUserOnline(username);
             Stage profileStage = new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
@@ -33,9 +41,11 @@ public class Showings  {
                         @Override
                         public void run() {
                             User user =Gettings.getUser(username);
-                            user.online=false;
-                            Gettings.writeUser(username,user);
-                            System.out.println("offline");
+                            if(user!=null) {
+                                user.online = false;
+                                Gettings.writeUser(username, user);
+                                System.out.println("offline");
+                            }
                         }
                     });
                 }
@@ -49,6 +59,7 @@ public class Showings  {
     }
     public static void showEditProfile(Object classObject,String username){
         try {
+            setUserOnline(username);
             Stage primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setControllerFactory(c -> {
@@ -69,7 +80,8 @@ public class Showings  {
     public static Stage showSearch(Object classObject,String myUsername){
         Stage primaryStage=null;
         try{
-             primaryStage=new Stage();
+            setUserOnline(myUsername);
+            primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
                 return new SearchController(myUsername);
@@ -109,6 +121,7 @@ public class Showings  {
     public static Stage showAddPost(Object classObject,String myUsername){
         Stage primaryStage= null;
         try{
+            setUserOnline(myUsername);
             primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {
@@ -130,6 +143,7 @@ public class Showings  {
     public static Stage showPeopleProfile(Object classObject,String usernamePeople,String myUsername){
         Stage primaryStage=null;
         try{
+            setUserOnline(myUsername);
             primaryStage=new Stage();
             FXMLLoader loader=new FXMLLoader();
             loader.setControllerFactory(c -> {

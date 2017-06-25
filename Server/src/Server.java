@@ -151,6 +151,8 @@ class Chat implements Serializable {
 
     @Override
     public boolean equals(Object object) {
+        if(object==null)
+            return false;
         return hashCode() == object.hashCode() ? true : false;
     }
 
@@ -259,10 +261,12 @@ class Post implements Serializable, Comparable<Post> {
 class NPComment implements Serializable {
     String username;
     String text;
+    HashSet<String> likes;
 
     NPComment(String text, String username) {
         this.text = text;
         this.username = username;
+        likes = new HashSet<String>();
     }
 }
 
@@ -303,6 +307,8 @@ class FileHandler {
             FileOutputStream fileOutputStream = new FileOutputStream(usersFirstInfoFile);
             ObjectOutputStream fileObjectOutputStream = new ObjectOutputStream(fileOutputStream);
             fileObjectOutputStream.writeObject(users);
+            fileObjectOutputStream.close();
+            fileOutputStream.close();
         }catch (IOException e){
             System.out.println("Exception while writing files :(");
             e.printStackTrace();
@@ -319,6 +325,8 @@ class FileHandler {
                 FileOutputStream fileOutputStream = new FileOutputStream(thisUserFile);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
                 objectOutputStream.writeObject(User.getUserFromHashSet(userFile,thisUserFirstInfo.username));
+                fileOutputStream.close();
+                objectOutputStream.close();
             }catch (IOException e){
                 System.out.println("Problem while writing into each user file");
                 e.printStackTrace();
@@ -332,7 +340,9 @@ class FileHandler {
             File userFile = new File("data/Users/" + username + "/" + "users.ser");
             FileInputStream userFileInputStream = new FileInputStream(userFile);
             ObjectInputStream userObjectInputStream = new ObjectInputStream(userFileInputStream);
-            return retUser = ((User) userObjectInputStream.readObject());
+            retUser = ((User) userObjectInputStream.readObject());
+            userObjectInputStream.close();
+            userFileInputStream.close();
         } catch (IOException e) {
             System.out.println("Problem while reading user file");
             e.printStackTrace();
