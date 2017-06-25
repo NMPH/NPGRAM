@@ -118,6 +118,7 @@ public class ChatController implements Initializable {
         yaruUser.chats.add(oldChat);
         Gettings.writeUser(yaruUser.userFirstInfo.username,yaruUser);
         imageView.setImage(null);
+        imageBytes=null;
         chatMessageTextField.setText(null);
         /*
         read textField and add message

@@ -26,7 +26,7 @@ class User implements Serializable {
     HashSet<String> followRequestsRecieved;
     HashSet<String> blockedUsernames;
     HashSet<String> blockedByUsernames;
-    boolean isPrivate;
+    boolean Private;
     String bio;
     byte[] profilePicture;
     TreeSet<Post> posts;
@@ -34,7 +34,7 @@ class User implements Serializable {
     HashSet<Chat> chats;
     User(UserFirstInfo userFirstInfo) {
         this.userFirstInfo = userFirstInfo;
-        isPrivate = false;
+        Private = false;
         posts = new TreeSet<Post>();
         followersUsernames = new HashSet<String>();
         followingsUsernames = new HashSet<String>();
@@ -239,6 +239,7 @@ class SocketAndStreams {
     Socket socket;
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
+
 
     SocketAndStreams(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;

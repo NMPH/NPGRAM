@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -6,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -40,11 +42,29 @@ public class EditProfileController implements Initializable{
     Label DoneLabel;
     @FXML
     TextField nameLabel,usernameLabel,bioLabel;
+    @FXML
+    Button privateButton;
+    @FXML
+    Button publicButton;
    /* public void exitEditProfileLabelclick(Event event){
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Showings.showProfile(this,username);
         stage.close();
     }*/
+    public void privateButtonClick(ActionEvent event){
+        user= Gettings.getUser(username);
+        user.Private=true;
+        privateButton.setVisible(false);
+        publicButton.setVisible(true);
+        Gettings.writeUser(username,user);
+    }
+    public void publicButtonClick(ActionEvent event){
+        user= Gettings.getUser(username);
+        user.Private=false;
+        privateButton.setVisible(true);
+        publicButton.setVisible(false);
+        Gettings.writeUser(username,user);
+    }
     public void DoneLabelClick(Event event){
         String name = nameLabel.getText();
         String oldUsername = user.userFirstInfo.username;
@@ -78,9 +98,15 @@ public class EditProfileController implements Initializable{
         stage.close();
     }
     public void setFields(String username){
+        publicButton.setVisible(false);
+        privateButton.setVisible(false);
         usernameLabel.setText(username);
         nameLabel.setText(user.userFirstInfo.fullName);
         bioLabel.setText(user.bio);
+        if(Gettings.getUser(username).Private)
+            publicButton.setVisible(true);
+        else
+            privateButton.setVisible(true);
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

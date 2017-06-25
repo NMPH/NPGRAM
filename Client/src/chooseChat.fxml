@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChooseChatController">
    <top>
-      <Button fx:id="addChatButton" mnemonicParsing="false" text="+" BorderPane.alignment="CENTER" />
+      <Button fx:id="addChatButton" mnemonicParsing="false" onAction="#addChat" text="+" BorderPane.alignment="CENTER" />
    </top>
    <center>
-      <ListView fx:id="chatsListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <StackPane fx:id="chatListPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

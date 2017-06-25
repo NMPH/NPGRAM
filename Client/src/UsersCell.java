@@ -91,7 +91,7 @@ private void setButtonsVisibilities(String item){
             lastItem = item;
             usernameLabel.setText(item != null ? item : "<null>");
             initFollowButton();
-            setButtonsVisibilities(item);
+            setButtonsVisibilities(item );
             setGraphic(vbox);
         }
     }

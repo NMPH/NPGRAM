@@ -53,7 +53,7 @@ public class ProfileController implements Initializable {
     public Label UsernameTitle;
     public String username;
     @FXML
-    ImageView profilePicture;
+    ImageView profilePictureImageView;
     @FXML
     Button editProfileButton;
     @FXML
@@ -260,8 +260,8 @@ public class ProfileController implements Initializable {
                 BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(file));
                 BufferedImage image = ImageIO.read(imageInputStream);
                 byte[] imageBytes= ImageFunctions.bufferedImageToByteArray(image,fileExtension);
-                profilePicture.setImage(SwingFXUtils.toFXImage(image, null ));
-                profilePicture.setClip(clip);
+                profilePictureImageView.setImage(SwingFXUtils.toFXImage(image, null ));
+                profilePictureImageView.setClip(clip);
                 user.setProfilePicture(imageBytes);
                Gettings.writeUser(username,user);
             } catch (IOException e) {
@@ -280,12 +280,12 @@ public class ProfileController implements Initializable {
             profileImage =  ImageFunctions.ByteArrayToBufferedImage(user.profilePicture);;
         }else{
             profileImage = ImageFunctions.ByteArrayToBufferedImage(Gettings.getInitImage());
+            user.profilePicture=Gettings.getInitImage();
+            Gettings.writeUser(username,user);
         }
-        if(profileImage!=null) {
             Image card = SwingFXUtils.toFXImage(profileImage, null );
-            profilePicture.setImage(card);
-            profilePicture.setClip(clip);
-        }
+            profilePictureImageView.setImage(card);
+            profilePictureImageView.setClip(clip);
         bioLabel.setText(user.bio);
 
         followersLabel.setText(new Integer(user.followersUsernames.size()).toString());

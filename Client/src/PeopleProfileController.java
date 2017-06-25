@@ -103,7 +103,7 @@ public class PeopleProfileController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         postsPane.setVisible(false);
-        if(myUser.followingsUsernames.contains(userPeople.userFirstInfo.username)){
+        if(myUser.followingsUsernames.contains(userPeople.userFirstInfo.username)|| !(userPeople.Private)){
             postsPane.setVisible(true);
             showPeoplePosts();
         }
