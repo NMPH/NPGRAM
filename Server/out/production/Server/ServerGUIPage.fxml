@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -9,12 +10,25 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ServerGUIPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="704.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ServerGUIPageController">
    <center>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="400.0" prefWidth="146.0">
+            <VBox prefHeight="400.0" prefWidth="141.0">
+               <children>
+                  <Label alignment="TOP_CENTER" text="Users Info">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <StackPane fx:id="usersInfoPane" prefHeight="400.0" prefWidth="147.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Region prefHeight="400.0" prefWidth="31.0" />
+            <VBox prefHeight="400.0" prefWidth="125.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Online People">
                      <VBox.margin>
@@ -24,10 +38,10 @@
                         <Font size="17.0" />
                      </font>
                   </Text>
-                  <StackPane fx:id="onlinePeoplePane" prefHeight="458.0" prefWidth="146.0" />
+                  <StackPane fx:id="onlinePeoplePane" prefHeight="380.0" prefWidth="126.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <Region prefHeight="400.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="400.0" prefWidth="72.0" HBox.hgrow="ALWAYS" />
             <VBox layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="132.0">
                <HBox.margin>
                   <Insets />
@@ -41,10 +55,10 @@
                         <Insets left="30.0" />
                      </VBox.margin>
                   </Text>
-                  <StackPane fx:id="allPeoplePane" prefHeight="435.0" prefWidth="132.0" />
+                  <StackPane fx:id="allPeoplePane" prefHeight="380.0" prefWidth="145.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <Region prefHeight="400.0" prefWidth="22.0" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="400.0" prefWidth="37.0" HBox.hgrow="ALWAYS" />
             <VBox layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="144.0">
                <HBox.margin>
                   <Insets />
@@ -58,7 +72,7 @@
                         <Insets left="18.0" />
                      </VBox.margin>
                   </Text>
-                  <StackPane fx:id="offlinePeoplePane" prefHeight="415.0" prefWidth="144.0" />
+                  <StackPane fx:id="offlinePeoplePane" prefHeight="415.0" prefWidth="144.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </children>

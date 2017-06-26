@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * Created by noyz on 6/21/17.
  */
-public class SearchController implements Initializable{
+public class SearchController{
     SearchController(String myUsername){
         this.myUsername=myUsername;
     }
@@ -53,10 +53,5 @@ public class SearchController implements Initializable{
         }else{
             userNotFoundLabel.setText("username not found..");
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 }

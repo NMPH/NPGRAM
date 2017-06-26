@@ -23,10 +23,6 @@ import javafx.stage.Stage;
 import sun.misc.Cache;
 
 import java.io.IOException;
-
-/**
- * Created by noyz on 6/22/17.
- */
 public class NewChatCell extends ListCell<String> {
     HBox hbox = new HBox();
     Label chatTo = new Label();

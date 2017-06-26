@@ -20,12 +20,14 @@ public class ServerGui extends Task<Void> {
     StackPane onlinePeoplePane;
     StackPane allPeoplePane;
     StackPane offlinePeoplePane;
+    StackPane usersInfoPane;
     HashSet<User> userFiles;
     HashSet<UserFirstInfo> usersFirstInfo;
     ServerGui(HashSet<User> userFiles,  HashSet<UserFirstInfo> usersFirstInfo,Stage stage,StackPane onlinePeoplePane,
-              StackPane allPeoplePane, StackPane offlinePeoplePane){
+              StackPane allPeoplePane, StackPane offlinePeoplePane,StackPane usersInfoPane){
         this.stage=stage;
         this.onlinePeoplePane=onlinePeoplePane;
+        this.usersInfoPane=usersInfoPane;
         this.allPeoplePane = allPeoplePane;
         this.offlinePeoplePane=offlinePeoplePane;
         this.userFiles=userFiles;
@@ -89,7 +91,20 @@ public class ServerGui extends Task<Void> {
 
                 }
             });
+            ListView<String> uflv = new ListView<>(allPeopleList);
+            uflv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                @Override
+                public ListCell<String> call(ListView<String> param) {
+                    return new ServerUserInformationCell(userFiles);
+                }
+            });
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    // bar.setProgress(counter / 1000000.0);
+                    usersInfoPane.getChildren().add(uflv);
 
+                }
+            });
             try{
                 Thread.sleep(1000);
             }catch(InterruptedException e){

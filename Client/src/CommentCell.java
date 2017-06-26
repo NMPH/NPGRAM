@@ -57,15 +57,6 @@ public class CommentCell extends ListCell<Integer> {
                 tu user e khodesh boro followReqReceved esho bar dar bebar tu followers
                 tu user e yaru boro az followReqSent bebar tu followings
                  */
-/*                User toFollow = Gettings.getUser(lastItem);
-                myUser.followRequestsRecieved.remove(toFollow.userFirstInfo.username);
-                myUser.followersUsernames.add(toFollow.userFirstInfo.username);
-                toFollow.followRequestsSent.remove(myUser.userFirstInfo.username);
-                toFollow.followingsUsernames.add(myUser.userFirstInfo.username);
-                Gettings.writeUser(myUser.userFirstInfo.username,myUser);
-                Gettings.writeUser(toFollow.userFirstInfo.username,toFollow);
-                hbox.setVisible(false);
-                profileController.followersLabel.setText(new Integer(myUser.followersUsernames.size()).toString());*/
             }
         });
     }

@@ -477,12 +477,6 @@ class SocketHandler implements Runnable {
                                 usersFirstInfos.add(newUserFile.userFirstInfo);
                                 break;
                             }
-                            //not changing it!!!
-                            /*userFile.remove(User.getUserFromHashSet(userFile,oldUsername));
-                                userFile.add(newUserFile);
-                                userFirstInfoIterator.remove();
-                                usersFirstInfos.add(newUserFile.userFirstInfo);
-                                break;*/
                         }
 
                     break;
@@ -492,7 +486,6 @@ class SocketHandler implements Runnable {
                     outputToSocket.writeObject(User.getUserFromHashSet(userFile,username));
                     outputToSocket.flush();
                     System.out.println("FUCK");
-                    //just wrote user file!
                     break;
                 }
                 case "get users": {
@@ -511,21 +504,11 @@ class SocketHandler implements Runnable {
                     UserFirstInfo newUserFirstInfo = new UserFirstInfo(fullName, username, password);
                     User newUser = new User(newUserFirstInfo);
                     userFile.add(newUser);
-/*                    if (!usersFile.exists()) {
-                        usersFile.createNewFile();
-                    }*/
                     usersFirstInfos.add(newUser.userFirstInfo);
                     outputToSocket.writeBoolean(true);
                     outputToSocket.flush();
-                    //userFileInputStream.close();
-                    //userFileObjectInputStream.close();
                     break;
                 }
-         /*       case "get_init":{
-                    File initFolder=new File("data/InitData");
-
-                    break;
-                }*/
             }
         } catch (ClassNotFoundException e) {
             System.out.println("IN RUN PROBLEM CLASS NOT FOUND");
@@ -604,43 +587,8 @@ public class Server extends Application{
             usersFirstInfo.add(userFirstInfo);
         }
     }
-/*    public static void openGUI(){
-        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-        Scene scene = new Scene(root,600,400);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }*/
     public static void main(String[] args) {
         launch(args);
-
-
-/*        Scanner commandGetter = new Scanner(System.in);
-        try {
-            ServerSocket server = new ServerSocket(1234);
-            Waiter waiter = new Waiter(server, userFiles, usersFirstInfo);
-            Thread t = new Thread(waiter);
-            t.start();
-
-            while (true) {
-                String command = commandGetter.next();
-                if ((command.equals("exit"))) {
-                    FileHandler.writeUserFilesAndUsers(userFiles,usersFirstInfo);
-                 *//*   for (SocketAndStreams i : waiter.sockets) {
-                        if ((!i.socket.isClosed()) && (i.socket.isConnected())) {
-                           // i.objectOutputStream.writeFloat(2);
-                            i.objectOutputStream.flush();
-                            i.objectOutputStream.close();
-                        }
-                    }*//*
-                    server.close();
-                    return;
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Problem While making server");
-            e.printStackTrace();
-        }*/
     }
 
     @Override
@@ -660,7 +608,6 @@ public class Server extends Application{
             Parent root=loader.load(getClass().getResource("ServerGUIPage.fxml").openStream());
             ServerGUIPageController serverGUIPageController=(ServerGUIPageController) loader.getController();
             Scene scene=new Scene(root);
-            //scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
 

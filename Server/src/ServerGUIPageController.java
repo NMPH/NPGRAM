@@ -29,10 +29,12 @@ public class ServerGUIPageController implements Initializable {
     StackPane allPeoplePane;
     @FXML
     StackPane offlinePeoplePane;
+    @FXML
+    StackPane usersInfoPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ServerGui serverGuiThread = new ServerGui(userFiles,userFirstInfos,stage,onlinePeoplePane,allPeoplePane,offlinePeoplePane);
+        ServerGui serverGuiThread = new ServerGui(userFiles,userFirstInfos,stage,onlinePeoplePane,allPeoplePane,offlinePeoplePane,usersInfoPane);
         Thread t = new Thread(serverGuiThread);
         t.start();
         stage.setOnHiding(new EventHandler<WindowEvent>() {

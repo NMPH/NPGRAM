@@ -46,11 +46,6 @@ public class EditProfileController implements Initializable{
     Button privateButton;
     @FXML
     Button publicButton;
-   /* public void exitEditProfileLabelclick(Event event){
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Showings.showProfile(this,username);
-        stage.close();
-    }*/
     public void privateButtonClick(ActionEvent event){
         user= Gettings.getUser(username);
         user.Private=true;
@@ -93,8 +88,6 @@ public class EditProfileController implements Initializable{
             e.printStackTrace();
         }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        //Showings.showProfile(this,username);
         stage.close();
     }
     public void setFields(String username){

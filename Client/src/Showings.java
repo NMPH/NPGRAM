@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,40 @@ public class Showings  {
                 user.online=true;
                 Gettings.writeUser(username,user);
             }
+    }
+    public static void showHome(Object classObject, Stage primaryStage,String username){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new HomeController(username, primaryStage);
+            });
+            Parent root = loader.load(classObject.getClass().getResource("Home.fxml").openStream());
+            HomeController homeController = (HomeController) loader.getController();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("Problem in openHome");
+            e.printStackTrace();
+        }
+    }
+    public static void showChooseChats(Object classObject, Stage primaryStage,String username){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(c -> {
+                return new ChooseChatController(username, primaryStage);
+            });
+            Parent root = loader.load(classObject.getClass().getResource("ChooseChat.fxml").openStream());
+            ChooseChatController chooseChatController = (ChooseChatController) loader.getController();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("Problem in showChooseChats");
+            e.printStackTrace();
+        }
     }
     public static void showProfile(Object classObject,String username){
         try{
@@ -162,22 +197,20 @@ public class Showings  {
         }
         return primaryStage;
     }
-    /*public static <ControllerType> void showPage(Object classObject,String username,String fxml, Method controllerConstructor){
+    public static LoginController showLogin(Object classObject){
         try {
             Stage primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
-            loader.setControllerFactory(c -> {
-                return new ControllerType(username);
-            });
-            Pane root = loader.load(classObject.getClass().getResource(fxml).openStream());
+            Pane root = loader.load(classObject.getClass().getResource("Login.fxml").openStream());
             Scene scene = new Scene(root);
             scene.getStylesheets().add(classObject.getClass().getResource("style.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
-        }catch(IOException e){
-            System.out.println("Problem while loading Showings.showEditProfile");
+            return (LoginController) loader.getController();
+        }catch (IOException e){
+            System.out.println("Problem in showLogin");
             e.printStackTrace();
         }
-
-    }*/
+        return null;
+    }
 }

@@ -61,28 +61,10 @@ public class PostMakeController {
                 imageFile= ImageFunctions.bufferedImageToByteArray(image,fileExtension);
                 imageView.setImage(SwingFXUtils.toFXImage(image, null ));
             } catch (IOException e) {
-                System.out.println("ERROR while reading from image");
+                System.out.println("ERROR while reading  image");
                 e.printStackTrace();
             }
         }
-   /*         FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select A Photo : ");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
-        );
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            imageFile = fileChooser.showOpenDialog(stage);
-            if(imageFile!=null) {
-                try {
-                    BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(imageFile));
-                    Image image = new Image(imageInputStream);
-                    imageView.setImage(image);
-                    // make a post
-                } catch (IOException e) {
-                    System.out.println("ERROR while reading Image in PostMakeController");
-                    e.printStackTrace();
-                }
-            }
-            System.out.println(imageFile);*/
     }
     public PostMakeController(String myUsername){
         this.myUsername = myUsername;

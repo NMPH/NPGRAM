@@ -128,7 +128,6 @@ public class PeopleProfileController implements Initializable{
         }
         BufferedImage profileImage=null;
         if (userPeople.profilePicture != null) {
-            //BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(user.profilePicture));
             profileImage =  ImageFunctions.ByteArrayToBufferedImage(userPeople.profilePicture);;
         }
             if (userPeople.profilePicture != null) {

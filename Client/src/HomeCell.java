@@ -94,15 +94,6 @@ public class HomeCell extends ListCell<Post> {
                     newPost.comments.add(newComment);
                     initCommentsPane(newPost);
                     User postUser = Gettings.getUser(owner.getText());
-                  /*  Iterator<Post> postIterator = postUser.posts.iterator();
-                    while(postIterator.hasNext()){
-                        System.out.println(postIterator.next().hashCode());
-                    }
-                    System.out.println("fasfas"+ lastItem.hashCode());
-                    if(postUser.posts.contains(lastItem)){
-                        System.out.println("IT DID!!!");
-                        //we have work here!
-                    }*/
                   if(postUser.removePostByHashCode(lastItem.hashCode())){
                       System.out.println("YEPPIE!!");
                       commentTextField.setText("");
@@ -210,16 +201,6 @@ public class HomeCell extends ListCell<Post> {
             imageView.setFitHeight(100);
             imageView.setFitWidth(100);
             imageView.setImage(card);
-            /*try {
-                BufferedInputStream imageInputStream = new BufferedInputStream(new FileInputStream(lastItem.image));
-                Image image = new Image(imageInputStream);
-                imageView.setImage(image);
-                imageView.setFitHeight(100);
-                imageView.setFitWidth(100);
-            } catch (IOException e) {
-                System.out.println("ERROR while reading from image");
-                e.printStackTrace();
-            }*/
         }
         System.out.println(lastItem.image);
     }

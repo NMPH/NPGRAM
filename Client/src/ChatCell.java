@@ -30,23 +30,16 @@ public class ChatCell extends ListCell<ChatMessage> {
         setText(null);  // No text in label of super class
         imageView.setVisible(false);
         if (empty) {
-            //lastItem = null;
             setGraphic(null);
         } else {
-            //lastItem = chatMessage;
             User toChatUser = Gettings.getUser(chatMessage.owner);
             messageText.setText(chatMessage.text);
-           // BufferedImage profileImage =  ImageFunctions.ByteArrayToBufferedImage(chatMessage.image);
             if( ImageFunctions.ByteArrayToBufferedImage(chatMessage.image)!=null) {
                 imageView.setVisible(true);
-                //Image card = SwingFXUtils.toFXImage( ImageFunctions.ByteArrayToBufferedImage(chatMessage.image), null );
                 imageView.setImage(SwingFXUtils.toFXImage( ImageFunctions.ByteArrayToBufferedImage(chatMessage.image), null ));
                 imageView.setFitHeight(80);
                 imageView.setFitWidth(80);
             }
-            //imageView.setImage(ImageFunctions.getJavaFXImage(chatMessage.image,50,50));
-            //toChatUser = Gettings.getUser(chatToUsername);
-            //initLabelAndButton(chatToUsername);
             setGraphic(hbox);
         }
     }

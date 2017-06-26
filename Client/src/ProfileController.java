@@ -63,25 +63,10 @@ public class ProfileController implements Initializable {
     public void refresh(Event event){
         user = Gettings.getUser(username);
         initWorks();
-        System.out.println("hereee!");
     }
     public void showChooseChats(Event event) {
-        try {
-            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setControllerFactory(c -> {
-                return new ChooseChatController(username, primaryStage);
-            });
-            Parent root = loader.load(getClass().getResource("ChooseChat.fxml").openStream());
-            ChooseChatController chooseChatController = (ChooseChatController) loader.getController();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            System.out.println("Problem in showChooseChats");
-            e.printStackTrace();
-        }
+        Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Showings.showChooseChats(this,primaryStage,username);
     }
     public void showFollowers(){
         Stage primaryStage = new Stage();
@@ -140,45 +125,8 @@ public class ProfileController implements Initializable {
         postsPane.getChildren().add(lv);
     }
     public void openHome(Event event){
-/*        Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        //Stage primaryStage = new Stage();
-        StackPane pane = new StackPane();
-        Scene scene = new Scene(pane, 650, 900);
-        primaryStage.setScene(scene);
-        ObservableList<Post> list = FXCollections.observableArrayList();
-        Iterator<String > followingsUsernames= user.followingsUsernames.iterator();
-        while(followingsUsernames.hasNext()){
-            Iterator<Post> postIterator = Gettings.getUser(followingsUsernames.next()).posts.iterator();
-            while (postIterator.hasNext()){
-                list.add(postIterator.next());
-                //we've got works here!
-            }
-        }
-        ListView<Post> lv = new ListView<>(list);
-        lv.setCellFactory(new Callback<ListView<Post>, ListCell<Post>>() {
-            @Override
-            public ListCell<Post> call(ListView<Post> param) {
-                return new HomeCell(user);
-            }
-        });
-        pane.getChildren().add(lv);
-        primaryStage.show();*/
-        try {
-            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setControllerFactory(c -> {
-                return new HomeController(username, primaryStage);
-            });
-            Parent root = loader.load(getClass().getResource("Home.fxml").openStream());
-            HomeController homeController = (HomeController) loader.getController();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            System.out.println("Problem in showChooseChats");
-            e.printStackTrace();
-        }
+        Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Showings.showHome(this,primaryStage,username);
     }
     public void addPost(Event event){
         Stage addPostStage = Showings.showAddPost(this,username);
@@ -246,12 +194,8 @@ public class ProfileController implements Initializable {
             Showings.showEditProfile(this,username);
     }
     public void setProfilePicture(Event event){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select A Photo : ");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),new FileChooser.ExtensionFilter("JPG", "*.jpg")
-        );
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        File file = fileChooser.showOpenDialog(stage);
+        File file = Gettings.getFileChooserImage(stage);
         if(file!=null) {
             try {
                 String fileName = file.getName();

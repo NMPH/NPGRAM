@@ -124,51 +124,12 @@ public class ChatController implements Initializable {
         read textField and add message
          */
     }
-    /*public void showChat(){
-        while(true){
-            HashSet<Chat> chats = myUser.chats;
-            Iterator<Chat> chatsIterator =chats.iterator();
-            while(chatsIterator.hasNext()){
-                //if chatIterator contains yaru!
-                Chat thisChat = chatsIterator.next();
-                if(thisChat.containsChatter(chat.chatter1)&&(thisChat.containsChatter(chat.chatter2))){
-                    chatToShow = thisChat;
-                    break;
-                }
-            }
-            if(chatToShow==null){
-                System.out.println("WTF CHAT IS EMPTY????!");
-            }else{
-                ObservableList<ChatMessage> list = FXCollections.observableArrayList();
-                Iterator<ChatMessage> chatMessageIterator = chatToShow.chatMessages.iterator();
-                while (chatMessageIterator.hasNext()){
-                    list.add(chatMessageIterator.next());
-                }
-                ListView<ChatMessage> lv = new ListView<>(list);
-                lv.setCellFactory(new Callback<ListView<ChatMessage>, ListCell<ChatMessage>>() {
-                    @Override
-                    public ListCell<ChatMessage> call(ListView<ChatMessage> param) {
-                        return new ChatCell();
-                    }
-                });
-                ChatPane.getChildren().add(lv);
-            }
-            try{
-                Thread.sleep(100);
-            }catch(InterruptedException e){
-                System.out.println("INTRUPPTED EXCEPTION IN SHOWCHAT ChatController");
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //showChat();
         ShowChatsClass showChatsClass = new ShowChatsClass(myUsername,chat,ChatPane,primaryStage);
         Thread t = new Thread(showChatsClass);
-        //t.setDaemon(true);
         t.start();
         primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
 
