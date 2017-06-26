@@ -3,20 +3,20 @@
  */
 
 import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -38,6 +38,7 @@ public class HomeCell extends ListCell<Post> {
     TextField commentTextField = new TextField();
     Button commentButton= new Button();
     Text comments = new Text();
+    StackPane commentsPane = new StackPane();
     Text dateCreated = new Text();
     Text likeCount = new Text();
     ImageView imageView = new ImageView();
@@ -47,7 +48,7 @@ public class HomeCell extends ListCell<Post> {
         super();
         this.myUser=myUser;
         removeVBox.getChildren().addAll(removePostButton);
-        firstPostInfoVBox.getChildren().addAll(imageView, pane, caption,owner,dateCreated, likeCount, comments,commentTextField,commentButton);
+        firstPostInfoVBox.getChildren().addAll(imageView, pane, caption,owner,dateCreated, likeCount, commentsPane,commentTextField,commentButton);
         likeVBox.getChildren().addAll(likeButton,unlikeButton);
         hbox.getChildren().addAll(firstPostInfoVBox,likeVBox,removeVBox);
         HBox.setHgrow(pane, Priority.ALWAYS);
@@ -59,14 +60,38 @@ public class HomeCell extends ListCell<Post> {
                 hbox.setVisible(false);
             }
         });
+        likeCount.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Stage primaryStage = new Stage();
+                StackPane pane = new StackPane();
+                Scene scene = new Scene(pane, 300, 150);
+                primaryStage.setScene(scene);
+                ObservableList<String > list = FXCollections.observableArrayList();
+                Iterator<String> followingsIterator =lastItem.likes.iterator();
+                while (followingsIterator.hasNext()){
+                    list.add(followingsIterator.next());
+                }
+                ListView<String> lv = new ListView<>(list);
+                lv.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                    @Override
+                    public ListCell<String> call(ListView<String> param) {
+                        return new UsersCell(myUser);
+                    }
+                });
+                pane.getChildren().add(lv);
+                primaryStage.show();
+            }
+        });
         commentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(Validations.isValidComment(commentTextField.getText())){
                     NPComment newComment = new NPComment(commentTextField.getText(),myUser.userFirstInfo.username);
-                    comments.setText(comments.getText().toString()+"\n"+newComment.username+ " said : "+ newComment.text);
+                    //comments.setText(comments.getText().toString()+"\n"+newComment.username+ " said : "+ newComment.text);
                     Post newPost = new Post(lastItem);
                     newPost.comments.add(newComment);
+                    initCommentsPane(newPost);
                     User postUser = Gettings.getUser(owner.getText());
                   /*  Iterator<Post> postIterator = postUser.posts.iterator();
                     while(postIterator.hasNext()){
@@ -124,6 +149,26 @@ public class HomeCell extends ListCell<Post> {
                 }
             }
         });
+    }
+    private void initCommentsPane(Post item){
+        commentsPane.setMaxWidth(400);
+        commentsPane.setMaxHeight(100);
+        ObservableList<Integer> list = FXCollections.observableArrayList();
+        Iterator<NPComment > npCommentIterator= item.comments.iterator();
+        Integer i=0;
+        while(npCommentIterator.hasNext()){
+            npCommentIterator.next();
+            list.add(i);
+            i++;
+        }
+        ListView<Integer> lv = new ListView<>(list);
+        lv.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
+            @Override
+            public ListCell<Integer> call(ListView<Integer> param) {
+                return new CommentCell(myUser,item);
+            }
+        });
+        commentsPane.getChildren().add(lv);
     }
     void initLikeHBox(Post item){
         likeButton.setVisible(false);
@@ -183,6 +228,7 @@ public class HomeCell extends ListCell<Post> {
             initFirstPostInfoHBox(item);
             initLikeHBox(item);
             initRemoveHBox(item);
+            initCommentsPane(item);
             setGraphic(hbox);
         }
     }

@@ -262,7 +262,15 @@ class NPComment implements Serializable {
     String username;
     String text;
     HashSet<String> likes;
-
+    NPComment (NPComment npComment){
+        this.username=npComment.username;
+        likes=new HashSet<String>();
+        text=npComment.text;
+        Iterator<String> likesIterator = npComment.likes.iterator();
+        while(likesIterator.hasNext()){
+            likes.add(likesIterator.next());
+        }
+    }
     NPComment(String text, String username) {
         this.text = text;
         this.username = username;

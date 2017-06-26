@@ -114,7 +114,8 @@ public class PeopleProfileController implements Initializable{
         if((myUser.isFollowRequestSent(userPeople.userFirstInfo.username))||(myUser.isFollowing(userPeople.userFirstInfo.username))){
             unFollowButton.setVisible(true);
         }else{
-            followButton.setVisible(true);
+            if(!userPeople.userFirstInfo.username.equals(myUser.userFirstInfo.username))
+                followButton.setVisible(true);
         }
         if(myUser.blockedUsernames.contains(userPeople.userFirstInfo.username)){
             unblockButton.setVisible(true);

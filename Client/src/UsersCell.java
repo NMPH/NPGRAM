@@ -75,7 +75,9 @@ private void setButtonsVisibilities(String item){
     if(myUser.followingsUsernames.contains(item)){
         openProfileButton.setVisible(true);
     }else{
-        followButton.setVisible(true);
+        if(!lastItem.equals(myUser.userFirstInfo.username)){
+            followButton.setVisible(true);
+        }
     }
 }
     @Override
