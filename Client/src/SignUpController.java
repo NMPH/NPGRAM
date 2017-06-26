@@ -36,15 +36,16 @@ public class SignUpController {
             badLoginInputsLabel.setText("Please review your login info");
         } else {
             try {
-                Socket server = new Socket("127.0.0.1", 1234);
+/*                Socket server = new Socket("127.0.0.1", 1234);
                 ObjectOutputStream outputToServer = new ObjectOutputStream(server.getOutputStream());
                 ObjectInputStream inputFromServer = new ObjectInputStream(server.getInputStream());
                 outputToServer.writeObject("sign_up");
                 outputToServer.writeObject(FullNameText.getText());
                 outputToServer.writeObject(UserNameText.getText());
                 outputToServer.writeObject(PasswordText.getText());
-                outputToServer.flush();
-                boolean isSignUpSuccessfull = inputFromServer.readBoolean();
+                outputToServer.flush();*/
+                boolean isSignUpSuccessfull =Gettings.isSignUp(FullNameText.getText(),UserNameText.getText()
+                ,PasswordText.getText());
                 if (isSignUpSuccessfull) {
                     Stage primaryStage=new Stage();
                     FXMLLoader loader=new FXMLLoader();
