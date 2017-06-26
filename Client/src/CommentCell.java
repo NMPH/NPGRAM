@@ -71,7 +71,7 @@ public class CommentCell extends ListCell<Integer> {
     }
     private void initHBOX(int itemIndex){
         likeComment.setMaxWidth(80);
-        commentText.setText(post.ownerUsername+" : " + post.comments.get(itemIndex).text);
+        commentText.setText(myUser.userFirstInfo.username+" : " + post.comments.get(itemIndex).text);
     }
     @Override
     protected void updateItem(Integer itemIndex, boolean empty) {

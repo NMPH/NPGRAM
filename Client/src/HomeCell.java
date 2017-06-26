@@ -86,6 +86,7 @@ public class HomeCell extends ListCell<Post> {
         commentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                commentsPane.setVisible(true);
                 if(Validations.isValidComment(commentTextField.getText())){
                     NPComment newComment = new NPComment(commentTextField.getText(),myUser.userFirstInfo.username);
                     //comments.setText(comments.getText().toString()+"\n"+newComment.username+ " said : "+ newComment.text);
@@ -169,6 +170,8 @@ public class HomeCell extends ListCell<Post> {
             }
         });
         commentsPane.getChildren().add(lv);
+        if(item.comments.isEmpty())
+            commentsPane.setVisible(false);
     }
     void initLikeHBox(Post item){
         likeButton.setVisible(false);

@@ -233,6 +233,7 @@ class Post implements Serializable, Comparable<Post> {
     byte[] image;
     String ownerUsername;
     PostDate date;
+    boolean isCommetOpen;
 
     Post(byte[] image, String caption, String ownerUsername) {
         this.ownerUsername = ownerUsername;

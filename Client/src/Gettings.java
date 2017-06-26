@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Created by noyz on 6/21/17.
  */
 public class Gettings {
-    public static final String ip = "127.0.0.1";
+    public static final String ip = "127.0.0.1  ";
     public static byte[] getHomeIcon(){
         byte[] image=null;
         try {

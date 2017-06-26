@@ -18,7 +18,7 @@
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label fx:id="UsernameTitle">
+                        <Label fx:id="usernameLabel">
                             <HBox.margin>
                                 <Insets />
                             </HBox.margin>

@@ -44,6 +44,8 @@ public class PeopleProfileController implements Initializable{
     Button blockButton;
     @FXML
     Button unblockButton;
+    @FXML
+    Label usernameLabel;
     public void block(ActionEvent event){
         myUser.blockedUsernames.add(userPeople.userFirstInfo.username);
         userPeople.blockedByUsernames.add(myUser.userFirstInfo.username);
@@ -102,6 +104,7 @@ public class PeopleProfileController implements Initializable{
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        usernameLabel.setText(userPeople.userFirstInfo.username);
         postsPane.setVisible(false);
         if(myUser.followingsUsernames.contains(userPeople.userFirstInfo.username)|| !(userPeople.Private)){
             postsPane.setVisible(true);
