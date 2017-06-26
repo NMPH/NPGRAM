@@ -233,15 +233,16 @@ class Post implements Serializable, Comparable<Post> {
     byte[] image;
     String ownerUsername;
     PostDate date;
-    boolean isCommetOpen;
+    boolean isCommentOpen;
 
-    Post(byte[] image, String caption, String ownerUsername) {
+    Post(byte[] image, String caption, String ownerUsername,boolean isCommentOpen) {
         this.ownerUsername = ownerUsername;
         this.image = image;
         this.caption = caption;
         comments = new ArrayList<NPComment>();
         likes = new ArrayList<String>();
         date = new PostDate();
+        this.isCommentOpen=isCommentOpen;
     }
 
     Post(Post post) {
@@ -251,6 +252,7 @@ class Post implements Serializable, Comparable<Post> {
         this.comments = post.comments;
         this.likes = post.likes;
         this.date = post.date;
+        isCommentOpen=post.isCommentOpen;
     }
 
     @Override

@@ -190,6 +190,10 @@ public class HomeCell extends ListCell<Post> {
             removePostButton.setVisible(false);
     }
     void initFirstPostInfoHBox(Post item){
+        if(!item.isCommentOpen){
+            commentTextField.setVisible(false);
+            commentButton.setVisible(false);
+        }
         likeCount.setText("likes: "+ (new Integer(item.likes.size()).toString()));
         commentButton.setText("post comment");
         dateCreated.setText(item.date.toString());

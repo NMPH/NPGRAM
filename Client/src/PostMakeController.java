@@ -3,6 +3,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -32,9 +34,11 @@ public class PostMakeController {
     ImageView imageView;
     @FXML
     TextField captionTextField;
+    @FXML
+    CheckBox openCommentCheckBox;
     public void submitPost(Event event){
         caption = captionTextField.getText();
-        Post post = new Post(imageFile,caption,myUsername);
+        Post post = new Post(imageFile,caption,myUsername,openCommentCheckBox.isSelected());
         myUser.posts.add(post);
         Gettings.writeUser(myUsername,myUser);
         //Showings.showProfile(this,myUsername);
