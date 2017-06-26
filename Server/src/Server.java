@@ -612,7 +612,8 @@ public class Server extends Application{
             stage.show();
 
         }catch (IOException e){
-            System.out.println("problem in showSearch function in Showings");
+            System.out.println("problem in Showing GUI");
+            e.printStackTrace();
         }
     }
 }
